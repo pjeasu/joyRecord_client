@@ -26,11 +26,6 @@
         <b-button size="sm" type="button" variant="secondary">글쓰기</b-button>
       </div>
     </b-container>
-
-
-
-
-
     <br><br>
     <!-- todo:동적으로 불러오도록 수정 -->
     <nav aria-label="Page navigation example">
