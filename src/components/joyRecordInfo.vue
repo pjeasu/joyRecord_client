@@ -81,7 +81,7 @@ export default {
 </script>
 <style scoped>
 .container {
-  font-family: NanumGothicBold;
+  font-family: NanumGothic;
   width: 80%;
   margin: 0 auto;
   padding: 20px;
@@ -99,7 +99,7 @@ h3 {
 }
 
 h1 {
-  font-family: MaruBuri-SemiBold;
+  font-family: NanumGothicBold;
 }
 
 ul {

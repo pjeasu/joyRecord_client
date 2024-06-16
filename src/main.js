@@ -30,4 +30,3 @@ app.use(router).use(store).use(BootstrapVue3).mount("#app");
 
 
 
-

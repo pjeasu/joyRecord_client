@@ -24,11 +24,8 @@ const getUserInfo = (user_id, password) => {
       if (userInfoResponse.data.length === 0) {
         return 'notFound'
       } else {
-        console.log('doLogin')
-        console.log(userInfoResponse)
         localStorage.setItem('user_token', userInfoResponse.data.token)
         localStorage.setItem('user_role', userInfoResponse.data.user_role)
-        console.log(localStorage)
         return userInfoResponse
       }
     } catch (err) {
