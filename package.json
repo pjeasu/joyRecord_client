@@ -12,6 +12,7 @@
     "@fullcalendar/daygrid": "^6.1.14",
     "@fullcalendar/interaction": "^6.1.14",
     "@fullcalendar/vue3": "^6.1.14",
+    "@vuepic/vue-datepicker": "^8.8.0",
     "axios": "^1.7.2",
     "bootstrap-vue-3": "^0.5.1",
     "core-js": "^3.8.3",

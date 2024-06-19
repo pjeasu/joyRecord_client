@@ -68,16 +68,17 @@ export default {
 
 @font-face {
   font-family: 'NanumGothic';
-  src: local(※), url('./assets/fonts/NanumGothic.ttf') format('truetype'),
-    url('./assets/fonts/NanumGothic.otf') format('opentype');
+  src: local(※),
+    url('./assets/fonts/NanumGothic.otf') format('opentype'),
+    url('./assets/fonts/NanumGothic.ttf') format('truetype');
   font-weight: 400;
 
 }
 
 @font-face {
   font-family: 'NanumGothicBold';
-  src: url('./assets/fonts/NanumGothicBold.ttf') format('truetype'),
-    url('./assets/fonts/NanumGothicBold.otf') format('opentype');
+  src: url('./assets/fonts/NanumGothicBold.otf') format('opentype'),
+    url('./assets/fonts/NanumGothicBold.ttf') format('truetype');
   font-weight: 500;
 }
 

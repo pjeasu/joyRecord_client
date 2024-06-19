@@ -54,7 +54,6 @@ export default {
           password: this.password
         })
         if (loginResult) {
-          alert('로그인 결과 : ' + loginResult)
           this.$router.push({
             name: 'mainCalendar'
           })

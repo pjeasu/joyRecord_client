@@ -26,6 +26,7 @@ const getUserInfo = (user_id, password) => {
       } else {
         localStorage.setItem('user_token', userInfoResponse.data.token)
         localStorage.setItem('user_role', userInfoResponse.data.user_role)
+        localStorage.setItem('member_id', userInfoResponse.data.member_id)
         return userInfoResponse
       }
     } catch (err) {

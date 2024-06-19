@@ -3,10 +3,10 @@
 		<b-row>
 			<b-col md="6" offset-md="3">
 				<b-card title="Sign Up">
-					<b-form @submit.prevent="onSubmit">
+					<b-form @submit.prevent>
 						<!-- 아이디 -->
-						<b-form-group label="아이디" label-for="loginId" label-size="sm" label-align="left">
-							<b-form-input id="loginId" v-model="form.name" required
+						<b-form-group label="아이디" label-for="user_id" label-size="sm" label-align="left">
+							<b-form-input id="user_id" v-model="form.user_id" required
 								placeholder="Enter your ID"></b-form-input>
 						</b-form-group>
 
@@ -27,6 +27,12 @@
 								placeholder="Enter your email"></b-form-input>
 						</b-form-group>
 
+						<!-- 이름 -->
+						<b-form-group label="이름" label-for="user_name">
+							<b-form-input id="user_name" type="text" v-model="form.user_name" required
+								placeholder="Enter your name"></b-form-input>
+						</b-form-group>
+
 						<!-- 생년월일 -->
 						<b-form-group label="생년월일" label-for="birth">
 							<b-form-input id="birth" v-model="form.birth" required
@@ -42,7 +48,7 @@
 							</b-form-checkbox>
 						</b-form-group>
 
-						<b-button type="submit" variant="primary">회원가입</b-button>
+						<b-button type="submit" @click="joinMember()" variant="primary">회원가입</b-button>
 					</b-form>
 				</b-card>
 			</b-col>
@@ -157,10 +163,12 @@ export default {
 	data() {
 		return {
 			form: {
-				name: '',
+				user_id: '',
 				email: '',
+				user_name: '',
 				password: '',
 				confirmPassword: '',
+				birth: '',
 				termsAccepted: false,
 			},
 			privacyPolicyModal: {
@@ -176,21 +184,41 @@ export default {
 		};
 	},
 	methods: {
-		onSubmit() {
+		joinMember() {
 			if (this.form.password !== this.form.confirmPassword) {
-				alert('Passwords do not match');
+				alert('비밀번호가 일치하지 않습니다.');
 				return;
 			}
 
 			if (!this.form.termsAccepted) {
-				alert('You must agree to the terms and conditions');
+				alert('개인 정보 보호 정책 및 서비스 약관에 동의 해야 합니다.');
 				return;
 			}
 
+			this.axios.post("/member/join",
+				this.form,
+				{
+					headers: {
+						'Content-Type': "multipart/form-data"
+					}
+				}).then((res) => {
+					//중복아이디가 있을경우 
+					if (res.data.error) {
+						alert(res.data.error);
+					} else {
+						alert('회원가입이 완료되었습니다. 로그인해주세요.')
+						this.$router.push({
+							name: 'loginPage'
+						})
+					}
 
 
-			// Handle form submission
-			alert(`Name: ${this.form.name}\nEmail: ${this.form.email}\nPassword: ${this.form.password}`);
+				}).catch((res) => {
+					//실패
+					console.error("실패 ", res);
+				})
+
+
 		},
 		showModal(type) {
 			if (type === 'TS') {
