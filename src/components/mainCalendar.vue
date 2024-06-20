@@ -1,9 +1,6 @@
 <template>
   <div id="mainCalendar">
-    <div>
-      {{ title }}
-    </div>
-    <div id="calendar" ref="calendar" style="margin:auto 20em 10em 20em"></div>
+    <div id="calendar" ref="calendar" style="margin:0 5em; max-height:80vh; max-width:90vw"></div>
 
     <!-- 글 상세보기 / 글쓰기 모달 -->
     <EventModal v-model="eventModal" :type="type" :board_id="board_id" :selectedDate="selectedDate"
@@ -36,6 +33,7 @@ export default {
       selectedDate: '', // 선택한 날짜를 저장할 변수
       events: [], // 캘린더에 바인딩될 이벤트(글) 리스트
       board_id: '',
+
     }
 
 
@@ -58,10 +56,16 @@ export default {
         eventContent: function (arg) {
           return { html: `<div class="fc-event-title">${arg.event.title}</div>` };
         },
+        customButtons: {
+          mainList: {
+            text: 'list',
+            click: this.toMainList
+          }
+        },
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,listWeek'
+          right: 'dayGridMonth,mainList'
         },
         dateClick: this.dateClick,
         eventClick: this.eventClick
@@ -116,6 +120,11 @@ export default {
       console.log('child component');
       this.eventModal = false;
       this.selectList();
+    },
+    toMainList() {
+      this.$router.push({
+        name: 'mainList'
+      })
     }
 
 

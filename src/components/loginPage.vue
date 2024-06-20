@@ -1,18 +1,22 @@
 <template>
-  <div style="padding: 1em; font-weight: bolder; color: darkslategrey">
-    {{ title }}
-  </div>
-  <div>
-    <h2>Please Log In</h2>
-    <div id="loginForm">
-      <b-form style="width:25%; margin:2em auto" @submit.prevent>
-        <b-form-input name="uid" placeholder="Enter your ID" v-model="user_id" /><br />
-        <b-form-input name="password" placeholder="Enter your password" v-model="password" type="password" />
-        <b-button variant="primary" style="margin:1em" @click="fnLogin()">Login</b-button>
-      </b-form>
 
-      <router-link to="/signUp">회원가입</router-link>
-    </div>
+  <div>
+    <b-card class="text-center rounded-3" style="max-width: 30rem; margin:0 auto; margin-top:8rem">
+      <div id="loginForm" style="padding:2em;">
+        <h2 class="label-text">LogIn</h2>
+        <b-form style="width:80%; margin:2em auto; " @submit.prevent>
+          <label for="uid" class="label-text">USER ID</label>
+          <b-form-input name="uid" placeholder="Enter your ID" v-model="user_id" /><br />
+          <label for="password" class="label-text">PASSWORD</label>
+          <b-form-input name="password" placeholder="Enter your password" v-model="password" type="password" />
+          <b-button block style="margin:1em; background-color:#EAC39F; border:none" @click="fnLogin()">LOGIN</b-button>
+        </b-form>
+
+        <router-link to="/signUp" class="label-text">회원가입</router-link>
+      </div>
+    </b-card>
+
+
   </div>
 </template>
 <script>
@@ -72,30 +76,11 @@ export default {
     ...mapGetters({
       errorState: 'getErrorState'
     })
-
-    /* doLogin(){
-      this.param.user_id = this.user_id;
-      this.param.password = this.password;
-
-      this.axios.post("/api/auth/login", 
-          this.param,
-          {
-            headers:{
-            'Content-Type': 'application/json'}
-            }).then((res) => {
-              //성공
-              console.log("성공", res);
-              localStorage.setItem('user-token', res);
-              console.log(localStorage)
-              this.$router.push({
-                name: 'mainCalendar'
-              })
-              
-            }).catch((res) => {
-              //실패
-              console.error("실패 ", res);
-            })
-          } */
   }
 }
 </script>
+<style>
+.label-text {
+  color: #B4D7C2
+}
+</style>

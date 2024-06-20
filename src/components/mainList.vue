@@ -1,7 +1,4 @@
 <template>
-  <div>
-    {{ title }}
-  </div>
   <div style="margin:5em">
     <b-container>
       <b-table striped hover :items="items" :fields="fields">
