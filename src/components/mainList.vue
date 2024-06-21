@@ -3,7 +3,7 @@
     <b-container>
       <b-table striped hover :items="items" :fields="fields">
         <template #cell(title)="row">
-          <b-button variant="link" size="sm" @click="openModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-button variant="link" size="sm" @click="openModal(row.item)" class="mr-1">
             {{ row.value }}
           </b-button>
 
@@ -11,16 +11,12 @@
 
       </b-table>
 
-      <b-modal centered v-model="modalShow" size="xl" class="custom-modal">
-        <pre>{{ titleModal.title }}</pre>
-        <b-card>
+      <EventModal v-model="eventModal" :type="type" :board_id="board_id" @closeModal="close" />
 
-          {{ titleModal.content }}
 
-        </b-card>
-      </b-modal>
+
       <div class="float-end">
-        <b-button size="sm" type="button" variant="secondary">글쓰기</b-button>
+        <b-button @click="openModal()" size="sm" type="button" variant="secondary">글쓰기</b-button>
       </div>
     </b-container>
     <br><br>
@@ -39,13 +35,19 @@
   </div>
 </template>
 <script>
+
+import EventModal from './modal/eventModal.vue';
 export default {
   name: 'mainList',
+  components: {
+    EventModal
+  },
   props: {
   },
   data() {
     return {
       title: 'mainList',
+      eventModal: false, // 모달의 표시 여부
       fields: [
         {
           key: 'board_id',
@@ -53,7 +55,7 @@ export default {
           sortable: true
         },
         {
-          key: 'name',
+          key: 'joy_name',
           label: '취미',
           sortable: false
         },
@@ -65,18 +67,19 @@ export default {
           sortable: true
         },
         {
+          key: 'joy_date',
+          label: '취미일',
+          sortable: true
+        },
+        {
           key: 'created_date',
           label: '작성일',
           sortable: true
         }
       ],
       items: [],
-      titleModal: {
-        id: 'title-modal',
-        title: '',
-        content: ''
-      },
-      modalShow: false
+      board_id: '',
+      type: 'view',
     }
 
   },
@@ -104,14 +107,21 @@ export default {
         });
 
     },
-    openModal(item, index) {
-      this.titleModal.title = `Row index: ${index}`;
-      this.titleModal.content = JSON.stringify(item, null, 2);
-      this.modalShow = true;
+    openModal(item) {
+      if (item) {
+        this.type = 'view';
+        this.board_id = item.board_id;
+      } else {
+        this.type = 'write';
+      }
+
+      this.eventModal = true;
     },
-    resetTitleModal() {
-      this.titleModal.title = ''
-      this.titleModal.content = ''
+
+    close() {
+      this.eventModal = false;
+
+      this.selectList();
     },
   }
 }

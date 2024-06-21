@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <b-card class="text-center rounded-3" style="max-width: 30rem; margin:0 auto; margin-top:8rem">
+    <b-card class="text-center rounded-4" style="max-width: 30rem; margin:0 auto; margin-top:8rem">
       <div id="loginForm" style="padding:2em;">
         <h2 class="label-text">LogIn</h2>
         <b-form style="width:80%; margin:2em auto; " @submit.prevent>
@@ -82,5 +82,9 @@ export default {
 <style>
 .label-text {
   color: #B4D7C2
+}
+
+.card-body {
+  border: none;
 }
 </style>

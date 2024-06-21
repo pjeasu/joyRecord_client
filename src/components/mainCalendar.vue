@@ -1,6 +1,6 @@
 <template>
   <div id="mainCalendar">
-    <div id="calendar" ref="calendar" style="margin:0 5em; max-height:80vh; max-width:90vw"></div>
+    <div id="calendar" ref="calendar" style="margin:0 auto; max-height:80vh; max-width:70vw"></div>
 
     <!-- 글 상세보기 / 글쓰기 모달 -->
     <EventModal v-model="eventModal" :type="type" :board_id="board_id" :selectedDate="selectedDate"
@@ -54,7 +54,9 @@ export default {
         locale: 'ko',
         events: this.events,
         eventContent: function (arg) {
-          return { html: `<div class="fc-event-title">${arg.event.title}</div>` };
+
+          // console.log(arg)
+          return { html: `<div class="fc-event-title" style="border-radius: 0.5em; background-color:${arg.event.backgroundColor}">${arg.event.title}</div>` };
         },
         customButtons: {
           mainList: {
@@ -65,7 +67,7 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,mainList'
+          right: 'mainList'
         },
         dateClick: this.dateClick,
         eventClick: this.eventClick
@@ -78,13 +80,17 @@ export default {
     },
     /* 캘린더 날짜 클릭시, 모달 출력 */
     dateClick(info) {
-      info.dayEl.style.backgroundColor = '#d8e6f9';
+      console.log('click date')
+
+      //info.dayEl.style.backgroundColor = '#d8e6f9';
       this.selectedDate = info.dateStr;
       this.type = 'write'
       this.eventModal = true;
+
     },
     /* 등록되어 있는 이벤트 클릭시, 모달 출력  */
     eventClick(info) {
+      console.log('click Event')
       this.type = 'view'
       this.eventModal = true;
       this.board_id = info.event.id;
@@ -103,8 +109,10 @@ export default {
           title: event.title,
           start: event.joy_date,
           id: event.board_id,
-          borderColor: ''
+          color: "#B4D7C2", //todo : db에서 동적으로 가져오기
         }));
+
+        console.log(this.events)
 
       })
         .catch((error) => {
@@ -117,7 +125,6 @@ export default {
 
     },
     close() {
-      console.log('child component');
       this.eventModal = false;
       this.selectList();
     },
@@ -132,11 +139,42 @@ export default {
 };
 </script>
 <style>
-.fc-event-title {
+/* .fc-event-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
+} */
+
+/* 캘린더 상단 버튼 */
+.fc .fc-button-primary {
+  background-color: #FFD6B1;
+  border-color: #FFD6B1;
+  color: #ffffff;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #fbc99d;
+  border-color: #fbc99d;
+  color: #ffffff;
+}
+
+
+.fc .fc-button-primary:disabled {
+  background-color: #9a9a9a;
+  border-color: #9a9a9a;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #f6ba86;
+  border-color: #f6ba86;
+  color: #ffffff;
+}
+
+.fc-toolbar-title {
+  font-weight: 700;
+  padding-right: 4em;
 }
 
 #mainCalendar a {
@@ -146,4 +184,20 @@ export default {
   /* 링크의 색상 제거 */
 
 }
+
+/* 캘린더 배경  */
+.fc-view-harness {
+  background-color: rgb(183, 229, 255, 0.2);
+}
+
+/* 오늘 날짜 */
+.fc-day-today {
+  background-color: rgb(255, 214, 177, 0.4) !important;
+}
+
+
+/* .fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event {
+  background-color: #f6ba86
+} */
 </style>

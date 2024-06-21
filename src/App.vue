@@ -18,18 +18,7 @@ export default {
     mainHeader
   },
   methods: {
-    /* 로그아웃  */
-    fnLogout() {
-      localStorage.removeItem("user_token");
-      localStorage.removeItem("user_role");
-      this.$store.state.isLogin = false;
-      this.$store.state.user = null;
 
-      alert('로그아웃 되었습니다.')
-      this.$router.push({
-        name: 'loginPage'
-      })
-    }
   }
 }
 </script>
@@ -43,7 +32,10 @@ export default {
   background-color: #FAF7EB
 }
 
-
+a {
+  text-decoration-line: none !important;
+  color: #2c3e50 !important;
+}
 
 .header {
   font-size: 20px

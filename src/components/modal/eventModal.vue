@@ -1,5 +1,6 @@
 <template>
-  <b-modal ref="eventModal" :title="state" size="lg" centered hide-footer :no-close-on-backdrop="true" @hide="onHide">
+  <b-modal ref="eventModal" :title="state == 'write' ? '글 쓰기' : (state == 'view' ? '글 보기' : '글 수정')" size="lg" centered
+    hide-footer :no-close-on-backdrop="true" @hide="onHide">
     <!-- state : view(글 보기) / write(글쓰기) / edit(수정하기) -->
     <b-input-group style="display:inline">
       <div class="form-inline">
@@ -55,7 +56,7 @@ export default {
       title: '',        //글 제목
       board_text: '',   // 글 내용
       joy_date: '',     // 취미 날짜
-      joyList: [],      // 취미 콤보 박스
+      joyList: [],      // 취미 콤보 박스.
       joySelected: null,// 취미 콤보 박스 선택
       state: this.type,
       //todo: 
@@ -84,9 +85,8 @@ export default {
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
   },
   updated() {
-    //console.log('!!!!!!!!!!!!!update!!!!!!!!!!!!!!!')
     if (this.state == 'view') {
-      //기존 이벤트 클릭하는 경우 조회
+      //캘린더 화면 - 기존 이벤트 클릭하는 경우 조회
       console.log('view;;;;;;;;;;;;;;;;;;;;;;;')
       this.selectOne();
     }
@@ -129,7 +129,6 @@ export default {
             value: data.joy_id,
           }));
           this.joyList.unshift({ text: '선택', value: '' });
-          console.log(this.joyList)
         })
         .catch((error) => {
           console.log(error);
@@ -145,8 +144,6 @@ export default {
       param.joy_id = this.joySelected;
       param.board_id = this.board_id;
       param.member_id = localStorage.member_id;
-
-      console.log(param);
 
       if (this.state == 'write') {
         console.log('saveData');
@@ -167,10 +164,7 @@ export default {
             //실패
             console.error("실패 ", res);
           })
-
       } else if (this.state == 'edit') {
-        console.log('editData');
-
         this.axios.put('/board/updateBoard', param, {
           headers: {
             'Content-Type': 'application/json'
@@ -195,12 +189,12 @@ export default {
     /* 모달 닫기 버튼*/
     closeModal() {
       // state 초기화
-      this.state = 'view';
+      this.state = 'write';
       this.$emit('closeModal');
     },
     onHide() {
       // 모달이 숨겨지기 전에 발생하는 이벤트 :: state 초기화
-      this.state = 'view';
+      this.state = 'write';
     },
   }
 };
@@ -208,6 +202,12 @@ export default {
 <style>
 /* Readonly 상태일 때 포커싱 스타일 제거 */
 textarea[readonly]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Readonly 상태일 때 포커싱 스타일 제거 */
+input[readonly]:focus {
   outline: none;
   box-shadow: none;
 }

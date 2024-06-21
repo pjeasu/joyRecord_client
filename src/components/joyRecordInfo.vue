@@ -1,9 +1,4 @@
 <template>
-  <div>
-    {{ title }}
-  </div>
-
-
   <div class="container">
     <h1 style="line-height:200%; ">JoyRecord</h1>
     <div class="section">
@@ -87,8 +82,26 @@ export default {
   padding: 20px;
   text-align: left;
   line-height: 3em;
+  max-height: 80%;
+  overflow-y: auto;
 
+}
 
+/* 스크롤바의 폭 너비 */
+.container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #FFD6B1;
+  /* 스크롤바 색상 */
+  border-radius: 10px;
+  /* 스크롤바 둥근 테두리 */
+}
+
+.container::-webkit-scrollbar-track {
+  background: #EEEAD5;
+  /*스크롤바 뒷 배경 색상*/
 }
 
 h1,

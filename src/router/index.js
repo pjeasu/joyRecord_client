@@ -7,7 +7,9 @@ import mainCalendar from '@/components/mainCalendar.vue';
 import mainList from '@/components/mainList.vue';
 import memberInfo from '@/components/memberInfo.vue';
 import joyRecordInfo from '@/components/joyRecordInfo.vue';
+import joyChart from '@/components/joyChart.vue';
 import notFound from '@/components/notFound.vue';
+
 
 
 
@@ -64,6 +66,12 @@ const routes = [
     {   path: '/memberInfo', 
         name: 'memberInfo',
         component : memberInfo,
+        beforeEnter: requireAuth()
+    }, 
+    // 회원정보
+    {   path: '/joyChart', 
+        name: 'joyChart',
+        component : joyChart,
         beforeEnter: requireAuth()
     }, 
     // 웹사이트 설명 
