@@ -1,9 +1,47 @@
 <template>
-  <div style="margin:5em">
-    <b-container>
-      <b-table striped hover :items="items" :fields="fields">
+  <div style="margin:1em 5em">
+    <b-container style="min-height:40em">
+      <b-input-group style="display:inline;">
+        <div class="form-inline" style=" margin-bottom:1em">
+          <b-col sm="1"> <label for="joy-combo"> 취미 : </label></b-col>
+          <b-col sm="2">
+            <b-form-select id="joy-combo" v-model="joySelected" :options="joyList" :disabled="state == 'view'"
+              style="display:inline-block; margin-bottom :5px">
+            </b-form-select>
+          </b-col>
+
+          <b-col sm="2">
+            <b-form-input v-model="searchText" placeholder="검색" :readonly="state == 'view'" :value="title"
+              style="margin-bottom:5px"></b-form-input>
+          </b-col>
+          <b-col sm="1">기간 : </b-col>
+          <b-col sm="2">
+            <Datepicker v-model="joy_date" locale="ko" :enable-time-picker="false" :min-date="minDate"
+              :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
+
+          </b-col>
+          -
+          <b-col sm="2">
+            <Datepicker v-model="joy_date" locale="ko" :enable-time-picker="false" :min-date="minDate"
+              :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
+
+          </b-col>
+          <b-col sm="">
+            <b-button size="sm" type="button" variant="secondary">검색</b-button>
+
+          </b-col>
+
+
+
+        </div>
+      </b-input-group>
+      <b-table hover :items="items" :fields="fields" :per-page="perPage" :current-page="currentPage">
+        <template #cell(joy_name)="row">
+          {{ row.value == null ? '-' : row.value }}
+        </template>
         <template #cell(title)="row">
-          <b-button variant="link" size="sm" @click="openModal(row.item)" class="mr-1">
+          <b-button variant="link" size="sm" @click="openModal(row.item)" class="mr-1"
+            style="color:black; font-size:1rem;">
             {{ row.value }}
           </b-button>
 
@@ -16,38 +54,35 @@
 
 
       <div class="float-end">
-        <b-button @click="openModal()" size="sm" type="button" variant="secondary">글쓰기</b-button>
+        <b-button @click="openModal('new')" size="sm" type="button" variant="secondary">글쓰기</b-button>
       </div>
     </b-container>
     <br><br>
-    <!-- todo:동적으로 불러오도록 수정 -->
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center ">
-        <li class="page-item"><a class="page-link text-secondary" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">2</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">3</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">4</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">5</a></li>
-        <li class="page-item"><a class="page-link text-secondary" href="#">Next</a></li>
-      </ul>
-    </nav>
+    <b-pagination size="sm" :align="'center'" v-model="currentPage" :total-rows="rows" :per-page="perPage"
+      aria-controls="my-table"></b-pagination>
+
   </div>
 </template>
 <script>
 
 import EventModal from './modal/eventModal.vue';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 export default {
   name: 'mainList',
   components: {
-    EventModal
+    EventModal, Datepicker
   },
-  props: {
+  computed: {
+    rows() {
+      return this.items.length
+    }
   },
   data() {
     return {
       title: 'mainList',
       eventModal: false, // 모달의 표시 여부
+      searchText: '',
       fields: [
         {
           key: 'board_id',
@@ -73,21 +108,43 @@ export default {
         },
         {
           key: 'created_date',
-          label: '작성일',
+          label: '작성일시',
           sortable: true
         }
       ],
+      perPage: 10, // 한 페이지당 글 개수
+      currentPage: 1, // 현재 페이지 
       items: [],
       board_id: '',
-      type: 'view',
+      type: '',
+      joyList: [],
     }
 
   },
   mounted: function () {
+    this.selectJoyList(); // 취미 목록 조회(콤보박스)
     this.selectList();
   },
   methods: {
-
+    /* 콤보박스 취미 목록 조회  */
+    selectJoyList() {
+      this.axios.get("/joy/selectJoyList", {
+        params: {
+          'del_yn': 'N'
+        }
+      })
+        .then((res) => {
+          const datas = res.data;
+          this.joyList = datas.map(data => ({
+            text: data.joy_name,
+            value: data.joy_id,
+          }));
+          this.joyList.unshift({ text: '전체', value: '' });
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
     /* 글 목록 조회 */
     selectList() {
       this.axios.get("/board/selectBoardList", {
@@ -108,11 +165,13 @@ export default {
 
     },
     openModal(item) {
-      if (item) {
+      console.log('click!!!!!!!!!!!!!!!!!!!!!!!1')
+      console.log(item)
+      if (item === 'new') {
+        this.type = 'write';
+      } else {
         this.type = 'view';
         this.board_id = item.board_id;
-      } else {
-        this.type = 'write';
       }
 
       this.eventModal = true;
@@ -120,15 +179,19 @@ export default {
 
     close() {
       this.eventModal = false;
-
       this.selectList();
     },
   }
 }
 
 </script>
-<style>
+<style scoped>
 .custom-modal .modal-body {
   height: 50vh;
+}
+
+.table.b-table {
+  --bs-table-bg: rgb(255 255 255 / 30%);
+  --bs-table-border-color: #bed6d1;
 }
 </style>

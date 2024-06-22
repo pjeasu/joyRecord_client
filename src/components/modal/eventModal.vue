@@ -12,6 +12,14 @@
     </b-input-group>
     <b-form-input v-model="title" placeholder="제목을 입력하세요." :readonly="state == 'view'" :value="title"
       style="margin-bottom:5px"></b-form-input>
+    <!-- 첨부된 사진들  -->
+    <template v-if="fileYn">
+      <div v-for="(file, index) in attachFileList" :key="index" style="display: inline-block; ">
+        <img :src="file.base64Image" alt="Image" style="max-width:15em; margin-right:1em" />
+      </div>
+    </template>
+
+
     <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="10" :value="board_text"
       :readonly="state == 'view'"></b-form-textarea>
 
@@ -57,10 +65,10 @@ export default {
     },
     selectedDate: {
       type: String,
-      required: true
+      required: false
     },
     board_id: {
-      type: String,
+      type: Number,
       required: true
     },
 
@@ -81,7 +89,9 @@ export default {
       files: [],
       previewUrls: [],
 
-      new_board_id: '' // 새로 등록된 board_id
+      new_board_id: '', // 새로 등록된 board_id
+      fileYn: false,
+      attachFileList: [], // 등록된 게시물 첨부 사진 리스트
     }
   },
   watch: {
@@ -104,6 +114,8 @@ export default {
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
   },
   updated() {
+    console.log('update....')
+    console.log(this.state)
     if (this.state == 'view') {
       //캘린더 화면 - 기존 이벤트 클릭하는 경우 조회
       console.log('view;;;;;;;;;;;;;;;;;;;;;;;')
@@ -125,6 +137,13 @@ export default {
           this.board_text = form.board_text;
           this.joy_date = form.joy_date;
           this.joySelected = form.joy_id;
+
+          //첨부파일이 있으면 조회
+          if (form.file_id !== null) {
+            console.log('file o ')
+            this.fileYn = true;
+            this.selectFile();
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -132,6 +151,33 @@ export default {
 
 
     },
+    /*  첨부파일 조회  */
+    selectFile() {
+      this.axios.get("/boardFileR/selectBoardFile", {
+        params: {
+          'board_id': this.board_id
+        }
+      })
+        .then((res) => {
+          console.log(res)
+          this.attachFileList = res.data;
+          this.attachFileList.forEach(item => {
+            console.log(item)
+            this.axios.get(`/files/image/${item.file_name}`).then((result) => {
+              console.log(result)
+              const temp = result.data;
+              item.base64Image = 'data:image/jpeg;base64,' + temp.image; // Base64 문자열을 이미지 URL로 변환
+            })
+
+
+
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
+
     /* 콤보박스 취미 목록 조회  */
     selectJoyList() {
       this.axios.get("/joy/selectJoyList", {
