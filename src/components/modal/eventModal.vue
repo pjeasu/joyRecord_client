@@ -15,6 +15,21 @@
     <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="10" :value="board_text"
       :readonly="state == 'view'"></b-form-textarea>
 
+
+    <!-- 이미지 업로드 -->
+    <input type="file" id="file" multiple @change="handleFiles" />
+    <label for="file">
+      <div class="btn-upload">파일
+      </div>
+    </label>
+    <div v-if="previewUrls.length">
+      <h2>미리보기:</h2>
+      <div v-for="(url, index) in previewUrls" :key="index">
+        <img :src="url" :alt="'Image Preview ' + index" style="max-width: 200px; margin: 10px;" />
+      </div>
+    </div>
+    <!-- /이미지 업로드  -->
+
     <div class='float-end'>
       <b-button v-show="state == 'view'" class="mt-2" variant="outline-info" block @click="editClick()">수정</b-button>
       <b-button v-show="state == 'write'" class="mt-2" variant="secondary" block @click="saveData()">등록</b-button>
@@ -61,7 +76,12 @@ export default {
       state: this.type,
       //todo: 
       minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2024, 11, 31)
+      maxDate: new Date(2024, 11, 31),
+      //이미지 업로드
+      files: [],
+      previewUrls: [],
+
+      new_board_id: '' // 새로 등록된 board_id
     }
   },
   watch: {
@@ -81,7 +101,6 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted....')
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
   },
   updated() {
@@ -101,7 +120,6 @@ export default {
         }
       })
         .then((res) => {
-          console.log(res);
           const form = res.data;
           this.title = form.title;
           this.board_text = form.board_text;
@@ -116,7 +134,6 @@ export default {
     },
     /* 콤보박스 취미 목록 조회  */
     selectJoyList() {
-      console.log('joyListw')
       this.axios.get("/joy/selectJoyList", {
         params: {
           'del_yn': 'N'
@@ -157,8 +174,18 @@ export default {
             }
           }).then((res) => {
             if (res) {
-              alert('글이 등록되었습니다.');
-              self.closeModal();
+              console.log(res)
+              this.new_board_id = res.data.board_id;
+
+              // 첨부파일이 있는 경우
+              if (this.files.length > 0) {
+                console.log('파일 있음')
+                this.uploadFiles();
+
+              } else {
+                alert('글이 등록되었습니다.');
+                self.closeModal();
+              }
             }
           }).catch((res) => {
             //실패
@@ -196,6 +223,41 @@ export default {
       // 모달이 숨겨지기 전에 발생하는 이벤트 :: state 초기화
       this.state = 'write';
     },
+
+    /* 파일 업로드  */
+    handleFiles(event) {
+      this.files = Array.from(event.target.files);
+      this.previewUrls = this.files.map(file => URL.createObjectURL(file));
+    },
+    async uploadFiles() {
+      if (this.files.length === 0) {
+        alert('업로드할 파일을 선택하세요.');
+        return;
+      }
+      const formData = new FormData();
+      this.files.forEach(file => {
+        formData.append('files', file);
+      });
+      formData.append('param', this.new_board_id);
+
+      try {
+        const response = await this.axios.post('/files/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log(response)
+        alert('글이 등록되었습니다.');
+        self.closeModal();
+      } catch (error) {
+        console.error('업로드 실패:', error);
+        alert('업로드 실패');
+      } finally {
+        //파일 초기화
+        this.files = [];
+      }
+    },
+
   }
 };
 </script>
@@ -221,5 +283,29 @@ input[readonly]:focus {
 .form-inline>* {
   margin-right: 5px;
   /* 각 요소 사이에 간격 추가 */
+}
+
+
+/* 파일 버튼 */
+.btn-upload {
+  width: 58px;
+  height: 38px;
+  background: #fff;
+  border: 1px solid rgb(77, 77, 77);
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
+}
+
+#file {
+  display: none;
 }
 </style>
