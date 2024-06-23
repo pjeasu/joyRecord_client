@@ -13,13 +13,25 @@
                 fill="black" />
         </svg>
 
+        <!--         <svg :style="logoStyle" width="221" height="81" viewBox="0 0 221 81" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="110.5" cy="40.5397" rx="107.5" ry="37.5397" fill="#FFFCF2" stroke="#217844" stroke-width="5" />
+            <path
+                d="M62.4437 57V43H74.4437V45H76.4437V51H72.4437V53H74.4437V55H76.4437V57H70.4437V55H68.4437V53H66.4437V57H62.4437ZM66.4437 51H70.4437V49H72.4437V45H66.4437V51ZM78.4437 57V43H92.4437V45H82.4437V49H90.4437V51H82.4437V55H92.4437V57H78.4437ZM98.4437 57V55H96.4437V53H94.4437V47H96.4437V45H98.4437V43H106.444V45H108.444V47H104.444V45H100.444V47H98.4437V53H100.444V55H104.444V53H108.444V55H106.444V57H98.4437ZM112.444 57V55H110.444V45H112.444V43H122.444V45H124.444V55H122.444V57H112.444ZM114.444 55H120.444V45H114.444V55ZM126.444 57V43H138.444V45H140.444V51H136.444V53H138.444V55H140.444V57H134.444V55H132.444V53H130.444V57H126.444ZM130.444 51H134.444V49H136.444V45H130.444V51ZM142.444 57V43H152.444V45H154.444V47H156.444V53H154.444V55H152.444V57H142.444ZM146.444 55H150.444V53H152.444V47H150.444V45H146.444V55Z"
+                fill="black" />
+            <path
+                d="M88.2218 37V35H86.2218V33H90.2218V35H96.2218V23H100.222V35H98.2218V37H88.2218ZM104.222 37V35H102.222V25H104.222V23H114.222V25H116.222V35H114.222V37H104.222ZM106.222 35H112.222V25H106.222V35ZM124.222 37V31H122.222V29H120.222V23H124.222V29H128.222V23H132.222V29H130.222V31H128.222V37H124.222Z"
+                fill="black" />
+        </svg>
+ -->
+
 
 
 
         <!-- 좌측 메뉴 아이콘 -->
 
         <b-dropdown class="float-start custom-dropdown" size="lg" variant="link" toggle-class="text-decoration-none"
-            no-caret offset="60,-60">
+            no-caret offset="70,-50">
             <template #button-content>
                 <i class="bi bi-list h1 " v-if="!hiddenElement"
                     style="font-size:2.5em; line-height:2.5em; margin-left:1em"></i>
@@ -46,8 +58,8 @@
                 <i class="bi bi-person-circle h1 float-end" v-if="!hiddenElement"
                     style="font-size:2.5em; line-height:2.5em; padding-right:1em"></i>
             </template>
-            <b-dropdown-item :to="{ path: 'memberInfo' }">회원정보</b-dropdown-item>
-            <b-dropdown-item @click="fnLogout">로그아웃</b-dropdown-item>
+            <b-dropdown-item :to="{ path: 'memberInfo' }">Member Info</b-dropdown-item>
+            <b-dropdown-item @click="fnLogout">Logout</b-dropdown-item>
         </b-dropdown>
 
 
@@ -118,16 +130,19 @@ export default {
 }
 
 .dropdown-item {
-    font-size: 1.5em !important;
+    font-size: 1.2em !important;
+    font-family: 'DungGeunMo';
     --bs-dropdown-link-active-bg: #fbc99d;
 }
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-    --bs-dropdown-link-active-bg: #fbc99d !important;
+    background-color: #fbc99d !important;
 }
 
 .dropdown-menu {
+    font-size: 1.5em !important;
+    font-family: 'DungGeunMo';
     --bs-dropdown-bg: #FFD6B1 !important;
     border: none !important;
 }

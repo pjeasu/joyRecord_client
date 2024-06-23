@@ -83,6 +83,9 @@ export default {
       title: 'mainList',
       eventModal: false, // 모달의 표시 여부
       searchText: '',
+      //todo: 
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2024, 11, 31),
       fields: [
         {
           key: 'board_id',
@@ -193,5 +196,17 @@ export default {
 .table.b-table {
   --bs-table-bg: rgb(255 255 255 / 30%);
   --bs-table-border-color: #bed6d1;
+}
+
+/* 페이징 버튼 */
+
+.pagination {
+  --bs-pagination-color: #fbc99d;
+  --bs-pagination-hover-color: #fbc99d;
+  --bs-pagination-focus-color: #fbc99d;
+  --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(233, 141, 28, 0.25);
+  --bs-pagination-active-color: #fff;
+  --bs-pagination-active-bg: #fbc99d;
+  --bs-pagination-active-border-color: #fbc99d;
 }
 </style>

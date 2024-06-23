@@ -1,6 +1,6 @@
 <template>
-  <b-modal ref="eventModal" :title="state == 'write' ? '글 쓰기' : (state == 'view' ? '글 보기' : '글 수정')" size="lg" centered
-    hide-footer :no-close-on-backdrop="true" @hide="onHide">
+  <b-modal id="eventModal" ref="eventModal" :title="state == 'write' ? '글 쓰기' : (state == 'view' ? '글 보기' : '글 수정')"
+    size="lg" centered hide-footer :no-close-on-backdrop="true" @hide="onHide">
     <!-- state : view(글 보기) / write(글쓰기) / edit(수정하기) -->
     <b-input-group style="display:inline">
       <div class="form-inline">
@@ -12,37 +12,46 @@
     </b-input-group>
     <b-form-input v-model="title" placeholder="제목을 입력하세요." :readonly="state == 'view'" :value="title"
       style="margin-bottom:5px"></b-form-input>
-    <!-- 첨부된 사진들  -->
-    <template v-if="fileYn">
-      <div v-for="(file, index) in attachFileList" :key="index" style="display: inline-block; ">
-        <img :src="file.base64Image" alt="Image" style="max-width:15em; margin-right:1em" />
+
+
+
+    <b-card style="height:24em" v-show="state == 'view'">
+      <!-- 첨부된 사진들  -->
+      <template v-if="fileYn">
+        <div v-for="(file, index) in attachFileList" :key="index" style="display: inline-block; ">
+          <img :src="file.base64Image" alt="Image" style="max-width:15em; margin-right:1em; margin-bottom:1em" />
+        </div>
+      </template>
+      <b-card-text>
+        {{ board_text }}
+      </b-card-text>
+    </b-card>
+
+
+    <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="15" :value="board_text"
+      v-show="state !== 'view'"></b-form-textarea>
+    <!-- 이미지 업로드 -->
+    <template v-if="state == 'write'">
+      <input type="file" id="file" multiple @change="handleFiles" />
+      <label for="file">
+        <div class="btn-upload modal-button">파일
+        </div>
+      </label>
+      <div v-if="previewUrls.length">
+        <h2>미리보기:</h2>
+        <div v-for="(url, index) in previewUrls" :key="index">
+          <img :src="url" :alt="'Image Preview ' + index" style="max-width: 200px; margin: 10px;" />
+        </div>
       </div>
     </template>
 
-
-    <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="10" :value="board_text"
-      :readonly="state == 'view'"></b-form-textarea>
-
-
-    <!-- 이미지 업로드 -->
-    <input type="file" id="file" multiple @change="handleFiles" />
-    <label for="file">
-      <div class="btn-upload">파일
-      </div>
-    </label>
-    <div v-if="previewUrls.length">
-      <h2>미리보기:</h2>
-      <div v-for="(url, index) in previewUrls" :key="index">
-        <img :src="url" :alt="'Image Preview ' + index" style="max-width: 200px; margin: 10px;" />
-      </div>
-    </div>
     <!-- /이미지 업로드  -->
 
     <div class='float-end'>
-      <b-button v-show="state == 'view'" class="mt-2" variant="outline-info" block @click="editClick()">수정</b-button>
-      <b-button v-show="state == 'write'" class="mt-2" variant="secondary" block @click="saveData()">등록</b-button>
-      <b-button v-show="state == 'edit'" class="mt-2" variant="secondary" block @click="saveData()">저장</b-button>
-      <b-button class="mt-2" variant="outline-info" block @click="closeModal()">닫기</b-button>
+      <b-button v-show="state == 'view'" class="mt-2 modal-button" block @click="editClick()">수정</b-button>
+      <b-button v-show="state == 'write'" class="mt-2 modal-button" block @click="saveData()">등록</b-button>
+      <b-button v-show="state == 'edit'" class="mt-2 modal-button" block @click="saveData()">저장</b-button>
+      <b-button class="mt-2 modal-button" block @click="closeModal()">닫기</b-button>
     </div>
 
   </b-modal>
@@ -68,8 +77,8 @@ export default {
       required: false
     },
     board_id: {
-      type: Number,
-      required: true
+      type: String,
+      required: false
     },
 
   },
@@ -139,7 +148,7 @@ export default {
           this.joySelected = form.joy_id;
 
           //첨부파일이 있으면 조회
-          if (form.file_id !== null) {
+          if (form.file_id !== 0) {
             console.log('file o ')
             this.fileYn = true;
             this.selectFile();
@@ -153,6 +162,7 @@ export default {
     },
     /*  첨부파일 조회  */
     selectFile() {
+      console.log('selectFile')
       this.axios.get("/boardFileR/selectBoardFile", {
         params: {
           'board_id': this.board_id
@@ -261,13 +271,15 @@ export default {
     },
     /* 모달 닫기 버튼*/
     closeModal() {
-      // state 초기화
-      this.state = 'write';
+      this.fileYn = false;
+      if (this.state === 'edit') {
+        this.state = 'view';
+      }
       this.$emit('closeModal');
+
     },
     onHide() {
-      // 모달이 숨겨지기 전에 발생하는 이벤트 :: state 초기화
-      this.state = 'write';
+      this.fileYn = false;
     },
 
     /* 파일 업로드  */
@@ -308,16 +320,26 @@ export default {
 };
 </script>
 <style>
+.form-control:focus {
+  border-color: #B4D7C2 !important;
+  box-shadow: 0 0 0 0.25rem #B4D7C2 !important;
+}
+
+.form-select:focus {
+  border-color: #B4D7C2 !important;
+  box-shadow: 0 0 0 0.25rem #B4D7C2 !important;
+}
+
 /* Readonly 상태일 때 포커싱 스타일 제거 */
 textarea[readonly]:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Readonly 상태일 때 포커싱 스타일 제거 */
 input[readonly]:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .form-inline {
@@ -336,22 +358,44 @@ input[readonly]:focus {
 .btn-upload {
   width: 58px;
   height: 38px;
-  background: #fff;
-  border: 1px solid rgb(77, 77, 77);
-  border-radius: 10px;
+  background: #FFD6B1;
+  color: #818385;
+  border: none;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500 !important;
+  margin-top: 8px;
 
   &:hover {
-    background: rgb(77, 77, 77);
+    background: #5c636a;
     color: #fff;
   }
 }
 
 #file {
   display: none;
+}
+
+#eventModal.modal {
+  --bs-modal-bg: #dedede;
+  --bs-modal-border-color: none;
+
+}
+
+.modal-body {
+  min-height: 35em;
+}
+
+/* 모달 하단 버튼  */
+.modal-button {
+  --bs-btn-color: #818385 !important;
+  --bs-btn-bg: #FFD6B1 !important;
+  --bs-btn-border-color: none !important;
+  margin-left: 0.5em;
+  font-weight: 500 !important;
 }
 </style>

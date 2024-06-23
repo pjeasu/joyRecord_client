@@ -62,4 +62,9 @@ a {
   src: url('./assets/fonts/NanumGothicExtraBold.ttf') format('truetype');
   font-weight: 700;
 }
+
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('./assets/fonts/DungGeunMo.otf') format('opentype');
+}
 </style>

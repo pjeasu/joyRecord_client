@@ -54,15 +54,17 @@ export default {
         locale: 'ko',
         events: this.events,
         eventContent: function (arg) {
-
-          // console.log(arg)
           return { html: `<div class="fc-event-title" style="border-radius: 0.5em; background-color:${arg.event.backgroundColor}">${arg.event.title}</div>` };
         },
         customButtons: {
           mainList: {
-            text: 'list',
+            text: 'LIST',
+            style: 'font-family : DungGeunMo',
             click: this.toMainList
-          }
+          },
+          today: {
+            text: 'TODAY'
+          },
         },
         headerToolbar: {
           left: 'prev,next today',
@@ -91,7 +93,7 @@ export default {
     /* 등록되어 있는 이벤트 클릭시, 모달 출력  */
     eventClick(info) {
       console.log('click Event')
-      this.type = 'view'
+      this.type = 'view';
       this.eventModal = true;
       this.board_id = info.event.id;
     },
@@ -151,6 +153,7 @@ export default {
   background-color: #FFD6B1;
   border-color: #FFD6B1;
   color: #ffffff;
+  font-family: 'DungGeunMo';
 }
 
 .fc .fc-button-primary:hover {
@@ -195,6 +198,9 @@ export default {
   background-color: rgb(255, 214, 177, 0.4) !important;
 }
 
+.fc-toolbar-title {
+  font-family: DungGeunMo
+}
 
 /* .fc-daygrid-dot-event.fc-event-mirror,
 .fc-daygrid-dot-event {
