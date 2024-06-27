@@ -1,6 +1,49 @@
 #app {
+	font-family: NanumGothic !important;
     margin: 0px auto;
 	width: 100vw;
 	height: 100vh;
 	background: radial-gradient( circle, #B4D7C2,#FAF7EB, #FAF7EB);
 }
+
+b-button .btn {
+	font-family: 'DungGeunMo'!important;
+}
+
+/* 페이징 버튼 */
+.pagination {
+	--bs-pagination-color: #fbc99d;
+	--bs-pagination-hover-color: #fbc99d;
+	--bs-pagination-focus-color: #fbc99d;
+	--bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(233, 141, 28, 0.25);
+	--bs-pagination-active-color: #fff;
+	--bs-pagination-active-bg: #fbc99d;
+	--bs-pagination-active-border-color: #fbc99d;
+  }
+
+  /* 테이블  */
+  .table.b-table {
+	--bs-table-bg: rgb(255 255 255 / 30%);
+	--bs-table-border-color: #bed6d1;
+  }
+  
+  td {
+	vertical-align: middle !important;
+  }
+  
+  #page-title{
+	text-align: left;
+	font-family: 'DungGeunMo';
+	margin:0 0 2em 2em;
+  }
+
+
+/* 체크박스  */  
+  .form-check-input:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+  .form-check-input:focus {
+	border-color: #e5ad06;
+	box-shadow: 0 0 0 0.25rem rgba(189, 160, 64, 0.25);}

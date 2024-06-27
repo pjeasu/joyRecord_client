@@ -8,6 +8,8 @@ import mainList from '@/components/mainList.vue';
 import memberInfo from '@/components/memberInfo.vue';
 import joyRecordInfo from '@/components/joyRecordInfo.vue';
 import joyChart from '@/components/joyChart.vue';
+import joyMng from '@/components/joyMng.vue';
+import memberMng from '@/components/memberMng.vue';
 import notFound from '@/components/notFound.vue';
 
 
@@ -29,6 +31,16 @@ const requireAuth = () => (from, to, next) => {
     }
   }
 
+  const checkRole = () =>  {
+    const role = localStorage.getItem('user_role');
+    console.log(role)
+    if(role === 'ADM'){
+        return '/memberMng'
+    }else{
+        return '/mainCalendar'
+    }
+  }
+
   
 const routes = [
     /** 메인 **/
@@ -36,7 +48,8 @@ const routes = [
     // 로그인
     {
         path: '/',
-        redirect: localStorage.getItem('user_token') ? 'mainCalendar' : 'loginPage'
+        //redirect: localStorage.getItem('user_token') ? 'mainCalendar' : 'loginPage'
+        redirect: checkRole()
     },
     { 
         path: '/loginPage',
@@ -72,6 +85,18 @@ const routes = [
     {   path: '/joyChart', 
         name: 'joyChart',
         component : joyChart,
+        beforeEnter: requireAuth()
+    }, 
+    // 취미관리
+    {   path: '/joyMng', 
+        name: 'joyMng',
+        component : joyMng,
+        beforeEnter: requireAuth()
+    }, 
+    // 회원관리
+    {   path: '/memberMng', 
+        name: 'memberMng',
+        component : memberMng,
         beforeEnter: requireAuth()
     }, 
     // 웹사이트 설명 

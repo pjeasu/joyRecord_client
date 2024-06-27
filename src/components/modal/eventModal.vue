@@ -15,7 +15,7 @@
 
 
 
-    <b-card style="height:24em" v-show="state == 'view'">
+    <b-card style="height:23.5em" v-show="state == 'view'">
       <!-- 첨부된 사진들  -->
       <template v-if="fileYn">
         <div v-for="(file, index) in attachFileList" :key="index" style="display: inline-block; ">
@@ -26,7 +26,6 @@
         {{ board_text }}
       </b-card-text>
     </b-card>
-
 
     <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="15" :value="board_text"
       v-show="state !== 'view'"></b-form-textarea>
@@ -48,10 +47,18 @@
     <!-- /이미지 업로드  -->
 
     <div class='float-end'>
-      <b-button v-show="state == 'view'" class="mt-2 modal-button" block @click="editClick()">수정</b-button>
-      <b-button v-show="state == 'write'" class="mt-2 modal-button" block @click="saveData()">등록</b-button>
-      <b-button v-show="state == 'edit'" class="mt-2 modal-button" block @click="saveData()">저장</b-button>
-      <b-button class="mt-2 modal-button" block @click="closeModal()">닫기</b-button>
+      <div id="pub_yn">
+        <b-form-checkbox @click="readonly" v-model="pub_yn" name="pub_yn" value="Y" unchecked-value="N">
+          공개여부
+        </b-form-checkbox>
+      </div>
+      <div style="display:inline-block">
+        <b-button v-show="state == 'view'" class="mt-2 modal-button" block @click="editClick()">수정</b-button>
+        <b-button v-show="state == 'write'" class="mt-2 modal-button" block @click="saveData()">등록</b-button>
+        <b-button v-show="state == 'edit'" class="mt-2 modal-button" block @click="saveData()">저장</b-button>
+        <b-button class="mt-2 modal-button" block @click="closeModal()">닫기</b-button>
+      </div>
+
     </div>
 
   </b-modal>
@@ -88,6 +95,7 @@ export default {
       title: '',        //글 제목
       board_text: '',   // 글 내용
       joy_date: '',     // 취미 날짜
+      pub_yn: false,     // 글 공개 여부 
       joyList: [],      // 취미 콤보 박스.
       joySelected: null,// 취미 콤보 박스 선택
       state: this.type,
@@ -146,6 +154,7 @@ export default {
           this.board_text = form.board_text;
           this.joy_date = form.joy_date;
           this.joySelected = form.joy_id;
+          this.pub_yn = form.pub_yn;
 
           //첨부파일이 있으면 조회
           if (form.file_id !== 0) {
@@ -216,6 +225,7 @@ export default {
       param.joy_date = this.joy_date;
       param.joy_id = this.joySelected;
       param.board_id = this.board_id;
+      param.pub_yn = this.pub_yn;
       param.member_id = localStorage.member_id;
 
       if (this.state == 'write') {
@@ -315,6 +325,14 @@ export default {
         this.files = [];
       }
     },
+    /* 체크박스 readonly 처리 */
+    readonly(event) {
+      // 글 보기 상태일 때만 체크박스 막기
+      if (this.state == 'view') {
+        event.preventDefault();
+      }
+
+    }
 
   }
 };
@@ -397,5 +415,13 @@ input[readonly]:focus {
   --bs-btn-border-color: none !important;
   margin-left: 0.5em;
   font-weight: 500 !important;
+}
+
+
+#pub_yn {
+  display: inline-block;
+  position: absolute;
+  right: 10em;
+  bottom: 2.8em;
 }
 </style>

@@ -26,14 +26,11 @@
  -->
 
 
-
-
         <!-- 좌측 메뉴 아이콘 -->
-
         <b-dropdown class="float-start custom-dropdown" size="lg" variant="link" toggle-class="text-decoration-none"
             no-caret offset="70,-50">
             <template #button-content>
-                <i class="bi bi-list h1 " v-if="!hiddenElement"
+                <i class="bi bi-list h1 " v-if="!hiddenElement" @click="roleCheck"
                     style="font-size:2.5em; line-height:2.5em; margin-left:1em"></i>
             </template>
             <b-dropdown-text style="width: 240px; font-size: 1em;">
@@ -46,12 +43,15 @@
             <b-dropdown-item :to="{ path: 'joyRecordInfo' }">
                 info
             </b-dropdown-item>
+            <b-dropdown-item v-show="isAdm" :to="{ path: 'joyMng' }">
+                취미관리
+            </b-dropdown-item>
+            <b-dropdown-item v-show="isAdm" :to="{ path: 'memberMng' }">
+                회원관리
+            </b-dropdown-item>
         </b-dropdown>
 
-
-
         <!-- 우측 회원 아이콘 -->
-
         <b-dropdown class="float-end custom-dropdown" size="lg" variant="link" toggle-class="text-decoration-none"
             no-caret offset="-60,-60">
             <template #button-content>
@@ -61,11 +61,6 @@
             <b-dropdown-item :to="{ path: 'memberInfo' }">Member Info</b-dropdown-item>
             <b-dropdown-item @click="fnLogout">Logout</b-dropdown-item>
         </b-dropdown>
-
-
-
-
-
 
     </div>
 </template>
@@ -79,8 +74,11 @@ export default {
 
     data() {
         return {
-
+            isAdm: false,
         };
+    },
+    mounted: function () {
+        this.roleCheck();
     },
     computed: {
         hiddenElement() {
@@ -98,13 +96,19 @@ export default {
             }
         }
     },
+
     methods: {
         /* 로고 클릭시 메인 화면으로 이동 */
         logoClick() {
+            let pageName = this.isAdm ? 'memberMng' : 'mainCalendar';
             this.$router.push({
-                name: 'mainCalendar'
+                name: pageName
             })
-
+        },
+        /* 권한 체크 */
+        roleCheck() {
+            const role = localStorage.getItem('user_role');
+            this.isAdm = role == 'ADM' ? true : false;
         },
         /* 로그아웃  */
         fnLogout() {
@@ -117,7 +121,7 @@ export default {
             this.$router.push({
                 name: 'loginPage'
             })
-        }
+        },
     }
 }
 </script>
