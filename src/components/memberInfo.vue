@@ -48,7 +48,7 @@
                   </b-col>
                   <b-col md="8">
                     <b-form-select class="colorSelect" :id="'colorSelect' + index" :options="colorList"
-                      value-field="value" text-field="text"
+                      value-field="value" text-field="text" v-model="item.color"
                       @change="event => updateBackground(event, index)">></b-form-select>
                   </b-col>
                 </b-row>
@@ -56,7 +56,7 @@
             </b-form>
 
             <b-button align-v="baseline" block style="margin:1em; background-color:#EAC39F; border:none"
-              @click="fnLogin()">저장</b-button>
+              @click="joySave()">저장</b-button>
           </b-card-body>
         </b-col>
       </b-row>
@@ -85,29 +85,56 @@ export default {
     this.selectJoyList();
   },
   methods: {
-    /* 콤보박스 취미 목록 조회  */
+    /* 우측 멤버 취미 목록 조회  */
     selectJoyList() {
-      this.axios.get("/joy/selectJoyList", {
+      this.axios.get("/selectMemberJoyRList", {
         params: {
+          'member_id': localStorage.member_id,
           'del_yn': 'N'
         }
       })
         .then((res) => {
-          this.joyList = res.data.map(item => ({
-            joy_id: item.joy_id,
-            joy_name: item.joy_name,
-            color: "", // 추가 될 색상
-          }));
-
+          this.joyList = res.data;
+          //기존에 저장한 색 selectbox에 바인딩
+          this.$nextTick(function () {
+            res.data.forEach(item => {
+              if (item.color.length > 0) {
+                this.updateBackground(item.color, item.joy_id - 1);
+              }
+            });
+          });
         })
         .catch((error) => {
           console.log(error);
         })
     },
+    /* 취미 별 색상 저장 */
+    joySave() {
+      console.log('joySave')
+      console.log(this.joyList)
+
+      this.axios.put('/upsertMemberJoyR', this.joyList, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(function (res) {
+          if (res.data.result > 0) {
+            alert('수정이 완료되었습니다.');
+            self.closeModal();
+          }
+        }).catch(function (error) {
+          // 오류발생시 실행
+          console.log(error)
+        });
+    },
+
+    /* 취미 색상 선택시 selectBox 색 바뀌도록  */
     updateBackground(value, index) {
       console.log(value)
       console.log(index)
       const indexId = 'colorSelect' + index;
+      console.log(indexId)
       document.getElementById(indexId).style.backgroundColor = value;
 
     }

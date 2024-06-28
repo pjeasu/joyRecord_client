@@ -100,9 +100,11 @@ export default {
 
     /* 글(이벤트) 조회 */
     selectList() {
+      const memberId = localStorage.member_id;
       this.axios.get("/board/selectBoardList", {
         params: {
-          'del_yn': 'N'
+          'del_yn': 'N',
+          'member_id': memberId
         }
       }).then((res) => {
         this.items = res.data;
@@ -111,7 +113,7 @@ export default {
           title: event.title,
           start: event.joy_date,
           id: event.board_id,
-          color: "#B4D7C2", //todo : db에서 동적으로 가져오기
+          color: event.color ? event.color : '#B4D7C2'
         }));
 
         console.log(this.events)

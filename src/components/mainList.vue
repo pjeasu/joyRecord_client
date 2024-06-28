@@ -1,8 +1,15 @@
 <template>
-  <div style="margin:1em 5em">
-    <b-container style="min-height:40em">
+  <div style="margin:3vh 5em">
+    <b-container style="min-height:60vh">
       <b-input-group style="display:inline;">
-        <div class="form-inline" style=" margin-bottom:1em">
+        <div class="form-inline" style="margin-bottom:1em">
+
+          <b-form-group>
+            <b-form-radio-group id="btn-radios" @change="selectList" v-model="listSelected" :options="listOptions"
+              name="radios-btn-default" buttons></b-form-radio-group>
+          </b-form-group>
+
+
           <b-col sm="1"> <label for="joy-combo"> 취미 : </label></b-col>
           <b-col sm="2">
             <b-form-select id="joy-combo" v-model="joySelected" :options="joyList"
@@ -118,6 +125,11 @@ export default {
       type: '',
       joyList: [],
       joySelected: '',
+      listOptions: [ //리스트 타입
+        { text: '내 글', value: 'mine' },
+        { text: '전체', value: 'all' }
+      ],
+      listSelected: 'mine'
 
     }
 
@@ -148,10 +160,14 @@ export default {
     },
     /* 글 목록 조회 */
     selectList() {
+      const param = { 'del_yn': 'N' };
+      if (this.listSelected == 'mine') {
+        console.log('memememem')
+        param.member_id = localStorage.member_id;
+      }
+      console.log(param)
       this.axios.get("/board/selectBoardList", {
-        params: {
-          'del_yn': 'N'
-        }
+        params: param
       })
         .then((res) => {
           console.log(res);
@@ -185,8 +201,40 @@ export default {
 }
 
 </script>
-<style scoped>
+<style>
 .custom-modal .modal-body {
   height: 50vh;
+}
+
+/* 상단 좌측 리스트 타입 라디오박스  */
+#btn-radios .form-check-inline {
+  margin-right: 0 !important;
+  margin-top: 1em;
+}
+
+#btn-radios .form-check-inline:first-child .btn {
+  border-radius: 0.3em 0 0 0.3em;
+  background-color: #B4D7C2;
+  border-color: #B4D7C2;
+}
+
+#btn-radios .form-check-inline:first-child .btn.active {
+  background-color: #67b686;
+  border-color: #67b686;
+}
+
+#btn-radios .form-check-inline:last-child .btn {
+  border-radius: 0 0.3em 0.3em 0;
+  background-color: #B4D7C2;
+  border-color: #B4D7C2;
+}
+
+#btn-radios .form-check-inline:last-child .btn.active {
+  background-color: #67b686;
+  border-color: #67b686;
+}
+
+fieldset {
+  margin-bottom: 0 !important;
 }
 </style>

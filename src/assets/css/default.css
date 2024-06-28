@@ -29,6 +29,7 @@ b-button .btn {
   
   td {
 	vertical-align: middle !important;
+	padding: 0.2em !important;
   }
   
   #page-title{
