@@ -39,7 +39,14 @@ export default {
 
   },
   mounted() {
+    console.log('mounted')
     this.selectList();
+
+
+  },
+  unmounted() {
+    console.log('unmounted')
+    this.events = [];
 
 
   },
@@ -192,7 +199,7 @@ export default {
 
 /* 캘린더 배경  */
 .fc-view-harness {
-  background-color: rgb(183, 229, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.45);
 }
 
 /* 오늘 날짜 */
