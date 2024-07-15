@@ -7,7 +7,7 @@ const getUserInfo = (user_id, password) => {
   }
 
   //let serverUrl = '//localhost:8080'
-  let serverUrl = 'http://52.78.30.246:8080'
+  let serverUrl = '//52.78.30.246:8080'
 
   return axios.post(serverUrl + '/api/auth/login', reqData, {
     headers: {
