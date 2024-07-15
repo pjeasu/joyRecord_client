@@ -19,7 +19,8 @@ const app = createApp(App);
 
 //전역변수
 app.config.globalProperties.axios = axios;
-axios.defaults.baseURL = 'http://localhost:8080';
+//axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://52.78.30.246:8080';
 
 axios.interceptors.request.use(
     (config) => {
