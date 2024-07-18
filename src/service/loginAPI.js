@@ -6,10 +6,7 @@ const getUserInfo = (user_id, password) => {
     'password': password
   }
 
-  //let serverUrl = '//localhost:8080'
-  let serverUrl = 'joy-record-server.n-e.kr:8080'
-
-  return axios.post(serverUrl + '/api/auth/login', reqData, {
+  return axios.post('/api/auth/login', reqData, {
     headers: {
       'Content-type': 'application/json'
     }
