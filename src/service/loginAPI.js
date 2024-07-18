@@ -6,7 +6,7 @@ const getUserInfo = (user_id, password) => {
     'password': password
   }
 
-  return axios.post('/api/auth/login', reqData, {
+  return axios.post('/auth/login', reqData, {
     headers: {
       'Content-type': 'application/json'
     }
