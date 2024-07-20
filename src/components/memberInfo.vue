@@ -77,7 +77,7 @@ export default {
       password: '',
       param: {},
       joyList: [],
-      colorList: [{ text: '선택', value: '' }, { text: 'ㅤ', value: '#F0EAD2' },
+      colorList: [{ text: '선택', value: '' }, { text: 'ㅤ', value: '#858BBE' },
       { text: 'ㅤ', value: '#BFE5B6' }, { text: 'ㅤ', value: '#81B29A' }, { text: 'ㅤ', value: '#F2CC8F' }]
     }
   },
@@ -87,7 +87,7 @@ export default {
   methods: {
     /* 우측 멤버 취미 목록 조회  */
     selectJoyList() {
-      this.axios.get("/selectMemberJoyRList", {
+      this.axios.get("/mjR/selectMemberJoyRList", {
         params: {
           'member_id': localStorage.member_id,
           'del_yn': 'N'
@@ -95,10 +95,11 @@ export default {
       })
         .then((res) => {
           this.joyList = res.data;
+          console.log(this.joyList)
           //기존에 저장한 색 selectbox에 바인딩
           this.$nextTick(function () {
             res.data.forEach(item => {
-              if (item.color.length > 0) {
+              if (item.color !== null) {
                 this.updateBackground(item.color, item.joy_id - 1);
               }
             });
@@ -113,7 +114,7 @@ export default {
       console.log('joySave')
       console.log(this.joyList)
 
-      this.axios.put('/upsertMemberJoyR', this.joyList, {
+      this.axios.put('/mjR/upsertMemberJoyR', this.joyList, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -162,7 +163,7 @@ export default {
 }
 
 .colorSelect option:nth-child(2) {
-  background-color: #F0EAD2;
+  background-color: #858BBE;
 }
 
 .colorSelect option:nth-child(3) {

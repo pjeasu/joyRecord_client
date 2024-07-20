@@ -98,6 +98,7 @@ export default {
         })
     },
     saveData() {
+      const self = this;
       this.axios.put('/member/deleteMember', { member_id: this.memberData.member_id }, {
         headers: {
           'Content-Type': 'application/json'
@@ -106,7 +107,7 @@ export default {
         .then(function (res) {
           if (res.data.result > 0) {
             alert('탈퇴처리가 완료되었습니다.');
-            this.closeModal();
+            self.closeModal();
           }
         }).catch(function (error) {
           // 오류발생시 실행

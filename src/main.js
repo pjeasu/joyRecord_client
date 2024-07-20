@@ -15,12 +15,12 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const app = createApp(App);
 
-
+export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 
 //전역변수
 app.config.globalProperties.axios = axios;
-//axios.defaults.baseURL = 'http://localhost:8080';
-axios.defaults.baseURL = 'https://joy-record-server.n-e.kr/api/';
+axios.defaults.baseURL = IS_LOCAL   ? 'http://localhost:8080/api/'
+                                    : 'https://joy-record-server.n-e.kr/api/';
 
 axios.interceptors.request.use(
     (config) => {

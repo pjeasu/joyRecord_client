@@ -7,7 +7,7 @@
         <b-form-select v-model="joySelected" :options="joyList" :disabled="state == 'view'"
           style="display:inline-block; margin-bottom :5px"></b-form-select>
         <Datepicker v-model="joy_date" locale="ko" :enable-time-picker="false" :min-date="minDate" :max-date="maxDate"
-          :readonly="state == 'view'" style="display:inline-block; margin-bottom :5px" />
+          :readonly="state == 'view'" st yle="display:inline-block; margin-bottom :5px" />
       </div>
     </b-input-group>
     <b-form-input v-model="title" placeholder="제목을 입력하세요." :readonly="state == 'view'" :value="title"
@@ -95,7 +95,7 @@ export default {
       title: '',        //글 제목
       board_text: '',   // 글 내용
       joy_date: '',     // 취미 날짜
-      pub_yn: false,     // 글 공개 여부 
+      pub_yn: 0,     // 글 공개 여부 
       joyList: [],      // 취미 콤보 박스.
       joySelected: null,// 취미 콤보 박스 선택
       state: this.type,
@@ -118,8 +118,20 @@ export default {
       if (this.state == 'write') {
         this.title = '';
         this.board_text = '';
-        this.joy_date = this.selectedDate; // 선택한 날짜 바인딩
         this.joySelected = '';
+        if (this.selectedDate == undefined) {
+          // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
+          const date = new Date();
+          const year = date.getFullYear();
+          const month = ('0' + (date.getMonth() + 1)).slice(-2);
+          const day = ('0' + date.getDate()).slice(-2);
+          this.joy_date = `${year}-${month}-${day}`;
+        } else {
+          this.joy_date = this.selectedDate; // 선택한 날짜 바인딩
+        }
+
+
+
       } /* else if (this.state == 'view') {
         //기존 이벤트 클릭하는 경우 조회
         console.log('view;;;;;;;;;;;;;;;;;;;;;;;')
@@ -230,6 +242,8 @@ export default {
 
       if (this.state == 'write') {
         console.log('saveData');
+
+        console.log(param.joy_date);
 
         this.axios.post("/board/insertBoard", null, {
           params: param
