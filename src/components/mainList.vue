@@ -113,6 +113,11 @@ export default {
           sortable: true
         },
         {
+          key: 'user_id',
+          label: '작성자',
+          sortable: true
+        },
+        {
           key: 'created_date',
           label: '작성일시',
           sortable: true
@@ -160,12 +165,28 @@ export default {
     },
     /* 글 목록 조회 */
     selectList() {
+      // 삭제처리 되지 않은 글만 조회
       const param = { 'del_yn': 'N' };
+
       if (this.listSelected == 'mine') {
-        console.log('memememem')
+        // 내 글보기 인경우에만 파라미터에 아이디 포함
         param.member_id = localStorage.member_id;
+        // 내 글보기인 경우에 작성자 표시 X
+        this.fields.forEach((e) => {
+          if (e.key === 'user_id') {
+            e.thClass = 'd-none';
+            e.tdClass = 'd-none';
+          }
+        })
+      } else {
+        // 모든 글 보기인 경우에만 작성자 표시
+        this.fields.forEach((e) => {
+          if (e.key === 'user_id') {
+            e.thClass = '';
+            e.tdClass = '';
+          }
+        })
       }
-      console.log(param)
       this.axios.get("/board/selectBoardList", {
         params: param
       })

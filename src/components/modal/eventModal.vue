@@ -53,7 +53,10 @@
         </b-form-checkbox>
       </div>
       <div style="display:inline-block">
-        <b-button v-show="state == 'view'" class="mt-2 modal-button" block @click="editClick()">수정</b-button>
+        <b-button v-show="state == 'view' && isMine" class="mt-2 modal-button" block
+          @click="openConfirmModal()">삭제</b-button>
+        <b-button v-show="state == 'view' && isMine" class="mt-2 modal-button" block
+          @click="editClick('edit')">수정</b-button>
         <b-button v-show="state == 'write'" class="mt-2 modal-button" block @click="saveData()">등록</b-button>
         <b-button v-show="state == 'edit'" class="mt-2 modal-button" block @click="saveData()">저장</b-button>
         <b-button class="mt-2 modal-button" block @click="closeModal()">닫기</b-button>
@@ -62,6 +65,7 @@
     </div>
 
   </b-modal>
+
 
 </template>
 
@@ -99,6 +103,8 @@ export default {
       joyList: [],      // 취미 콤보 박스.
       joySelected: null,// 취미 콤보 박스 선택
       state: this.type,
+      member_id: '',
+      isMine: false,
       //todo: 
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2024, 11, 31),
@@ -109,6 +115,7 @@ export default {
       new_board_id: '', // 새로 등록된 board_id
       fileYn: false,
       attachFileList: [], // 등록된 게시물 첨부 사진 리스트
+      confirmModal: false, // 모달의 표시 여부
     }
   },
   watch: {
@@ -119,8 +126,9 @@ export default {
         this.title = '';
         this.board_text = '';
         this.joySelected = '';
+
+        // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
         if (this.selectedDate == undefined) {
-          // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
           const date = new Date();
           const year = date.getFullYear();
           const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -141,6 +149,7 @@ export default {
   },
   mounted() {
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
+    this.member_id = localStorage.member_id;
   },
   updated() {
     console.log('update....')
@@ -167,7 +176,8 @@ export default {
           this.joy_date = form.joy_date;
           this.joySelected = form.joy_id;
           this.pub_yn = form.pub_yn;
-
+          //내가 쓴 글이 맞는지 체크
+          this.isMine = this.member_id == form.member_id ? true : false;
           //첨부파일이 있으면 조회
           if (form.file_id !== 0) {
             console.log('file o ')
@@ -238,7 +248,7 @@ export default {
       param.joy_id = this.joySelected;
       param.board_id = this.board_id;
       param.pub_yn = this.pub_yn;
-      param.member_id = localStorage.member_id;
+      param.member_id = this.member_id;
 
       if (this.state == 'write') {
         console.log('saveData');
@@ -288,10 +298,32 @@ export default {
           });
       }
     },
-    /* 글(이벤트) 수정하기 */
-    editClick() {
-      console.log('editData');
-      this.state = 'edit';
+    /* 글(이벤트) 수정 or 삭제하기 */
+    editClick(type) {
+      const self = this;
+      if (type === 'edit') {
+        console.log('editData');
+        this.state = 'edit';
+      } else if (type === 'del') {
+        console.log('del');
+        //todo : confirm
+        this.axios.put('/board/deleteBoard', { 'board_id': self.board_id }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(function (res) {
+            if (res.data.result > 0) {
+              alert('삭제되었습니다.');
+              self.closeModal();
+            }
+          }).catch(function (error) {
+            // 오류발생시 실행
+            console.log(error)
+          });
+      }
+
+
     },
     /* 모달 닫기 버튼*/
     closeModal() {
@@ -345,8 +377,7 @@ export default {
       if (this.state == 'view') {
         event.preventDefault();
       }
-
-    }
+    },
 
   }
 };
@@ -435,7 +466,7 @@ input[readonly]:focus {
 #pub_yn {
   display: inline-block;
   position: absolute;
-  right: 10em;
+  left: 2em;
   bottom: 2.8em;
 }
 </style>
