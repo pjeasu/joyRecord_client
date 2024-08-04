@@ -48,7 +48,7 @@
 
     <div class='float-end'>
       <div id="pub_yn">
-        <b-form-checkbox @click="readonly" v-model="pub_yn" name="pub_yn" value="Y" unchecked-value="N">
+        <b-form-checkbox v-show="isMine" @click="readonly" v-model="pub_yn" name="pub_yn" value="Y" unchecked-value="N">
           공개여부
         </b-form-checkbox>
       </div>
