@@ -18,22 +18,23 @@
           </b-col>
 
           <b-col sm="2">
-            <b-form-input v-model="searchText" placeholder="검색" :value="title" style="margin-bottom:5px"></b-form-input>
+            <b-form-input v-model="searchText" placeholder="검색" :value="searchText"
+              style="margin-bottom:5px"></b-form-input>
           </b-col>
           <b-col sm="1">기간 : </b-col>
           <b-col sm="2">
-            <Datepicker v-model="fromDate" locale="ko" :enable-time-picker="false" :min-date="minDate"
-              :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
+            <Datepicker v-model="fromDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false"
+              :min-date="minDate" :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
 
           </b-col>
           -
           <b-col sm="2">
-            <Datepicker v-model="toDate" locale="ko" :enable-time-picker="false" :min-date="minDate" :max-date="maxDate"
-              style="display:inline-block; margin-bottom :5px" />
+            <Datepicker v-model="toDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false" :min-date="minDate"
+              :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
 
           </b-col>
           <b-col sm="">
-            <b-button size="sm" type="button" variant="secondary">검색</b-button>
+            <b-button id="search-btn" size="md" type="button" variant="secondary" @click="selectList()">검색</b-button>
           </b-col>
         </div>
       </b-input-group>
@@ -87,8 +88,8 @@ export default {
       //todo: 
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2024, 11, 31),
-      toDate: new Date(2020, 0, 1),
-      fromDate: new Date(2020, 0, 1),
+      fromDate: '',
+      toDate: '',
       fields: [
         {
           key: 'board_id',
@@ -140,6 +141,9 @@ export default {
 
   },
   mounted: function () {
+    this.fromDate = new Date(2024, 0, 1);
+    this.toDate = new Date();
+
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
     this.selectList();
   },
@@ -166,7 +170,12 @@ export default {
     /* 글 목록 조회 */
     selectList() {
       // 삭제처리 되지 않은 글만 조회
-      const param = { 'del_yn': 'N' };
+      this.currentPage = 1;
+      const param = { del_yn: 'N' };
+      param.searchText = this.searchText;
+      param.joy_id = this.joySelected;
+      param.fromDate = this.fromDate;
+      param.toDate = this.toDate;
 
       if (this.listSelected == 'mine') {
         // 내 글보기 인경우에만 파라미터에 아이디 포함
@@ -187,6 +196,8 @@ export default {
           }
         })
       }
+
+      console.log(param)
       this.axios.get("/board/selectBoardList", {
         params: param
       })
@@ -253,6 +264,12 @@ export default {
 #btn-radios .form-check-inline:last-child .btn.active {
   background-color: #67b686;
   border-color: #67b686;
+}
+
+#search-btn {
+  background-color: #67b686;
+  border-color: #67b686;
+  padding: 0.5em;
 }
 
 fieldset {

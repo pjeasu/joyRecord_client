@@ -30,19 +30,19 @@
     <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="15" :value="board_text"
       v-show="state !== 'view'"></b-form-textarea>
     <!-- 이미지 업로드 -->
-    <template v-if="state == 'write'">
+    <!-- <template v-if="state == 'write'">
       <input type="file" id="file" multiple @change="handleFiles" />
       <label for="file">
         <div class="btn-upload modal-button">파일
         </div>
       </label>
       <div v-if="previewUrls.length">
-        <h2>미리보기:</h2>
+        <h5>미리보기:</h5>
         <div v-for="(url, index) in previewUrls" :key="index">
           <img :src="url" :alt="'Image Preview ' + index" style="max-width: 200px; margin: 10px;" />
         </div>
       </div>
-    </template>
+    </template> -->
 
     <!-- /이미지 업로드  -->
 
@@ -54,7 +54,7 @@
       </div>
       <div style="display:inline-block">
         <b-button v-show="state == 'view' && isMine" class="mt-2 modal-button" block
-          @click="openConfirmModal()">삭제</b-button>
+          @click="editClick('del')">삭제</b-button>
         <b-button v-show="state == 'view' && isMine" class="mt-2 modal-button" block
           @click="editClick('edit')">수정</b-button>
         <b-button v-show="state == 'write'" class="mt-2 modal-button" block @click="saveData()">등록</b-button>
@@ -362,9 +362,19 @@ export default {
         });
         console.log(response)
         alert('글이 등록되었습니다.');
-        self.closeModal();
+        this.closeModal();
       } catch (error) {
-        console.error('업로드 실패:', error);
+        if (error.response) {
+          // 서버가 응답을 반환했지만 상태 코드가 2xx가 아닌 경우
+          console.error('서버 응답 오류:', error.response.data);
+          console.error('상태 코드:', error.response.status);
+        } else if (error.request) {
+          // 요청이 전송되었지만 응답이 없는 경우
+          console.error('서버로부터 응답이 없습니다.', error.request);
+        } else {
+          // 요청을 설정하는 도중에 발생한 문제
+          console.error('요청 오류:', error.message);
+        }
         alert('업로드 실패');
       } finally {
         //파일 초기화

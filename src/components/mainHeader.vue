@@ -49,6 +49,9 @@
             <b-dropdown-item v-show="isAdm" :to="{ path: 'memberMng' }">
                 회원관리
             </b-dropdown-item>
+            <b-dropdown-item v-show="isAdm" :to="{ path: 'mainList' }">
+                게시글관리
+            </b-dropdown-item>
         </b-dropdown>
 
         <!-- 우측 회원 아이콘 -->
