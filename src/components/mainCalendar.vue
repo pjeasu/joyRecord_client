@@ -108,7 +108,7 @@ export default {
     /* 글(이벤트) 조회 */
     selectList() {
       const memberId = localStorage.member_id;
-      this.axios.get("/board/selectBoardList", {
+      this.axios.get("/board/selectBoardCalList", {
         params: {
           'del_yn': 'N',
           'member_id': memberId

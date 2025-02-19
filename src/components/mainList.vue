@@ -92,7 +92,7 @@ export default {
       toDate: '',
       fields: [
         {
-          key: 'board_id',
+          key: 'id',
           label: '번호',
           sortable: true
         },

@@ -242,6 +242,7 @@ export default {
     },
     /* 취미 별 색상 저장 */
     joySave() {
+      console.log(this.joyList)
       this.axios.put('/mjR/upsertMemberJoyR', this.joyList, {
         headers: {
           'Content-Type': 'application/json'
@@ -262,6 +263,7 @@ export default {
     updateBackground(value, index) {
       const indexId = 'colorSelect' + index;
       document.getElementById(indexId).style.backgroundColor = value;
+      console.log(this.joyList)
     }
   },
   computed: {
