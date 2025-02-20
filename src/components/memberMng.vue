@@ -85,9 +85,9 @@ export default {
     this.selectMemberList();
   },
   methods: {
-    /* 취미 목록 조회  */
+    /* 회원 목록 조회  */
     selectMemberList() {
-      this.axios.get("/member/selectMemberList", {
+      this.axios.get("/admin/selectMemberList", {
         params: {}
       })
         .then((res) => {
@@ -99,7 +99,7 @@ export default {
     },
     saveData() {
       const self = this;
-      this.axios.put('/member/deleteMember', { member_id: this.memberData.member_id }, {
+      this.axios.put('/admin/deleteMember', { member_id: this.memberData.member_id }, {
         headers: {
           'Content-Type': 'application/json'
         }
