@@ -2,7 +2,8 @@
 	<b-container class="mt-5">
 		<b-row>
 			<b-col md="6" offset-md="3">
-				<b-card title="Sign Up">
+				<b-card  class="card-body">
+					<h2 style="font-weight:bold">Sign Up</h2>
 					<b-form @submit.prevent>
 						<!-- 아이디 -->
 						<b-form-group label="아이디" label-for="user_id" label-size="sm" label-align="left">
@@ -235,4 +236,25 @@ export default {
 b-modal {
 	font-family: NanumGothic !important;
 }
+.card-body{
+	max-height: 72vh;
+    overflow-y: auto;
+}
+/* 스크롤바의 폭 너비 */
+.card-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background: #FFD6B1;
+  /* 스크롤바 색상 */
+  border-radius: 10px;
+  /* 스크롤바 둥근 테두리 */
+}
+
+.card-body::-webkit-scrollbar-track {
+  background: #EEEAD5;
+  /*스크롤바 뒷 배경 색상*/
+}
+
 </style>

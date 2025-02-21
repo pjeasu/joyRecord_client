@@ -150,10 +150,12 @@ export default {
         }
       })
         .then((res) => {
+          const self = this;
           this.joyList = res.data;
           //기존에 저장한 색 selectbox에 바인딩
           this.$nextTick(function () {
             res.data.forEach(item => {
+              item.member_id = self.member_id;
               if (item.color !== null) {
                 this.updateBackground(item.color, item.joy_id - 1);
               }
@@ -172,7 +174,6 @@ export default {
       this.changePW = false;
       if (!(this.form.password == '' || this.form.new_password == '' || this.form.check_password == '' ||
         this.form.password == null || this.form.new_password == null || this.form.check_password == null)) {
-        console.log('비밀번호 모두 적음 . ')
         this.changePW = true;
         if (this.form.new_password !== this.form.check_password) {
           alert('비밀번호가 일치하지 않습니다.');
@@ -209,7 +210,6 @@ export default {
       this.form.changePW = this.changePW;
       this.form.member_id = this.member_id;
 
-      console.log(this.form)
       this.axios.put('/member/updateMember', this.form, {
         headers: {
           'Content-Type': 'application/json'
@@ -242,7 +242,6 @@ export default {
     },
     /* 취미 별 색상 저장 */
     joySave() {
-      console.log(this.joyList)
       this.axios.put('/mjR/upsertMemberJoyR', this.joyList, {
         headers: {
           'Content-Type': 'application/json'
@@ -263,7 +262,6 @@ export default {
     updateBackground(value, index) {
       const indexId = 'colorSelect' + index;
       document.getElementById(indexId).style.backgroundColor = value;
-      console.log(this.joyList)
     }
   },
   computed: {

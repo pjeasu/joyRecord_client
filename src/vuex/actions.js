@@ -21,7 +21,6 @@ let processResponse = (store, loginResponse) => {
       setIsAuth(store, false)
       break
     default:
-      console.log(loginResponse)
       setUserId(store, loginResponse.data.user_id)
       setErrorState(store, '')
       setIsAuth(store, true)

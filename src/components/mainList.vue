@@ -55,6 +55,7 @@
       </b-table>
       <EventModal v-model="eventModal" :type="type" :board_id="board_id" @closeModal="close" />
 
+      <div v-show="items.length == 0">작성된 게시물이 없습니다. Joy를 기록하세요! 🎮🍺⚾🎥  </div>
       <div class="float-end">
         <b-button @click="openModal('new')" size="sm" type="button" variant="secondary">글쓰기</b-button>
       </div>
@@ -141,7 +142,7 @@ export default {
 
   },
   mounted: function () {
-    this.fromDate = new Date(2024, 0, 1);
+    this.fromDate = new Date(2025, 0, 1);
     this.toDate = new Date();
 
     this.selectJoyList(); // 취미 목록 조회(콤보박스)
@@ -197,24 +198,20 @@ export default {
         })
       }
 
-      console.log(param)
       this.axios.get("/board/selectBoardList", {
         params: param
       })
         .then((res) => {
-          console.log(res);
           this.items = res.data;
         })
         .catch((error) => {
           console.log(error);
         })
         .finally(() => {
-          console.log("항상 마지막에 실행");
         });
 
     },
     openModal(item) {
-      console.log(item)
       if (item === 'new') {
         this.type = 'write';
       } else {

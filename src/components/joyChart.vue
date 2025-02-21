@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ title }}
+    {{ description }}
   </div>
 </template>
 <script>
@@ -10,7 +10,8 @@ export default {
   },
   data() {
     return {
-      title: 'joyChart'
+      title: 'joyChart',
+      description : '현재 개발중 입니다. '
     }
 
   },

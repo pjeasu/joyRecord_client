@@ -88,11 +88,7 @@ export default {
   mounted() {
   },
   updated() {
-    console.log('update....')
-    console.log(this.state)
     if (this.state == 'edit') {
-      console.log('edit;;;;;;;;;;;;;;;;;;;;;;;')
-
       this.joy_id = this.joyData.joy_id;
       this.joy_name = this.joyData.joy_name;
       this.detail = this.joyData.detail;
@@ -111,11 +107,8 @@ export default {
       param.joy_name = this.joy_name;
       param.detail = this.detail;
       param.del_yn = this.del_yn;
-      console.log(param);
 
       if (this.state == 'write') {
-        console.log('saveData');
-
         this.axios.post("/joy/insertJoy", null, {
           params: param
         },
@@ -125,7 +118,6 @@ export default {
             }
           }).then((res) => {
             if (res) {
-              console.log(res)
               alert('글이 등록되었습니다.');
               self.closeModal();
             }

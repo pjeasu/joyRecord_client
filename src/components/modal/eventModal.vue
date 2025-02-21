@@ -125,26 +125,25 @@ export default {
       if (this.state == 'write') {
         this.title = '';
         this.board_text = '';
-        this.joySelected = '';
+        this.joySelected = null;
+      }
 
-        // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
-        if (this.selectedDate == undefined) {
+      // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
+       if (this.selectedDate == undefined) {
           const date = new Date();
           const year = date.getFullYear();
           const month = ('0' + (date.getMonth() + 1)).slice(-2);
           const day = ('0' + date.getDate()).slice(-2);
           this.joy_date = `${year}-${month}-${day}`;
-        } else {
-          this.joy_date = this.selectedDate; // 선택한 날짜 바인딩
-        }
+        } 
+    },
+   selectedDate(newDate) {
+      
+          this.joy_date = newDate; // 선택한 날짜 바인딩
+        
 
 
-
-      } /* else if (this.state == 'view') {
-        //기존 이벤트 클릭하는 경우 조회
-        console.log('view;;;;;;;;;;;;;;;;;;;;;;;')
-        this.selectOne();
-      } */
+  
     }
   },
   mounted() {
@@ -152,11 +151,8 @@ export default {
     this.member_id = localStorage.member_id;
   },
   updated() {
-    console.log('update....')
-    console.log(this.state)
     if (this.state == 'view') {
       //캘린더 화면 - 기존 이벤트 클릭하는 경우 조회
-      console.log('view;;;;;;;;;;;;;;;;;;;;;;;')
       this.selectOne();
     }
 
@@ -180,7 +176,6 @@ export default {
           this.isMine = this.member_id == form.member_id ? true : false;
           //첨부파일이 있으면 조회
           if (form.file_id !== 0) {
-            console.log('file o ')
             this.fileYn = true;
             this.selectFile();
           }
@@ -193,19 +188,15 @@ export default {
     },
     /*  첨부파일 조회  */
     selectFile() {
-      console.log('selectFile')
       this.axios.get("/boardFileR/selectBoardFile", {
         params: {
           'board_id': this.board_id
         }
       })
         .then((res) => {
-          console.log(res)
           this.attachFileList = res.data;
           this.attachFileList.forEach(item => {
-            console.log(item)
             this.axios.get(`/files/image/${item.file_name}`).then((result) => {
-              console.log(result)
               const temp = result.data;
               item.base64Image = 'data:image/jpeg;base64,' + temp.image; // Base64 문자열을 이미지 URL로 변환
             })
@@ -232,7 +223,7 @@ export default {
             text: data.joy_name,
             value: data.joy_id,
           }));
-          this.joyList.unshift({ text: '선택', value: '' });
+          this.joyList.unshift({ text: '선택', value: null });
         })
         .catch((error) => {
           console.log(error);
@@ -251,9 +242,6 @@ export default {
       param.member_id = this.member_id;
 
       if (this.state == 'write') {
-        console.log('saveData');
-
-        console.log(param.joy_date);
 
         this.axios.post("/board/insertBoard", null, {
           params: param
@@ -264,12 +252,10 @@ export default {
             }
           }).then((res) => {
             if (res) {
-              console.log(res)
               this.new_board_id = res.data.board_id;
 
               // 첨부파일이 있는 경우
               if (this.files.length > 0) {
-                console.log('파일 있음')
                 this.uploadFiles();
 
               } else {
@@ -302,10 +288,8 @@ export default {
     editClick(type) {
       const self = this;
       if (type === 'edit') {
-        console.log('editData');
         this.state = 'edit';
       } else if (type === 'del') {
-        console.log('del');
         //todo : confirm
         this.axios.put('/board/deleteBoard', { 'board_id': self.board_id }, {
           headers: {
@@ -328,6 +312,12 @@ export default {
     /* 모달 닫기 버튼*/
     closeModal() {
       this.fileYn = false;
+      this.title = '';
+      this.board_text = '';
+      this.joySelected = null;
+
+
+
       if (this.state === 'edit') {
         this.state = 'view';
       }
@@ -343,7 +333,7 @@ export default {
       this.files = Array.from(event.target.files);
       this.previewUrls = this.files.map(file => URL.createObjectURL(file));
     },
-    async uploadFiles() {
+    /* async uploadFiles() {
       if (this.files.length === 0) {
         alert('업로드할 파일을 선택하세요.');
         return;
@@ -360,7 +350,6 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log(response)
         alert('글이 등록되었습니다.');
         this.closeModal();
       } catch (error) {
@@ -380,7 +369,7 @@ export default {
         //파일 초기화
         this.files = [];
       }
-    },
+    }, */
     /* 체크박스 readonly 처리 */
     readonly(event) {
       // 글 보기 상태일 때만 체크박스 막기

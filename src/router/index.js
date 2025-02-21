@@ -33,7 +33,6 @@ const requireAuth = () => (from, to, next) => {
 
   const checkRole = () =>  {
     const role = localStorage.getItem('user_role');
-    console.log(role)
     if(role === 'ADM'){
         return '/memberMng'
     }else{

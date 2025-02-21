@@ -39,15 +39,11 @@ export default {
 
   },
   mounted() {
-    console.log('mounted')
     this.selectList();
-
 
   },
   unmounted() {
-    console.log('unmounted')
     this.events = [];
-
 
   },
   methods: {
@@ -89,9 +85,8 @@ export default {
     },
     /* 캘린더 날짜 클릭시, 모달 출력 */
     dateClick(info) {
-      console.log('click date')
+      this.selectedDate = '';
 
-      //info.dayEl.style.backgroundColor = '#d8e6f9';
       this.selectedDate = info.dateStr;
       this.type = 'write'
       this.eventModal = true;
@@ -99,7 +94,6 @@ export default {
     },
     /* 등록되어 있는 이벤트 클릭시, 모달 출력  */
     eventClick(info) {
-      console.log('click Event')
       this.type = 'view';
       this.eventModal = true;
       this.board_id = info.event.id;
@@ -122,8 +116,6 @@ export default {
           id: event.board_id,
           color: event.color ? event.color : '#B4D7C2'
         }));
-
-        console.log(this.events)
 
       })
         .catch((error) => {
