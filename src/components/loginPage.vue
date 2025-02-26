@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <b-card class="text-center rounded-4" style="max-width: 30rem; margin:0 auto; margin-top:8rem">
+    <b-card id="login-page" class="text-center rounded-4">
       <div id="loginForm" style="padding:2em;">
         <h2 class="label-text">LogIn</h2>
         <b-form style="width:80%; margin:2em auto; " @submit.prevent>
@@ -84,7 +84,19 @@ export default {
   color: #B4D7C2
 }
 
-.card-body {
-  border: none;
+#login-page{
+  max-width: 30rem; 
+  margin:0 auto; 
+  margin-top:3rem
 }
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+  #login-page{
+  max-width: 20rem; 
+  margin-top:0;
+}
+  
+}
+
 </style>

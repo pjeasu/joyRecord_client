@@ -1,11 +1,11 @@
 <template>
-  <div class="container mt-5">
+  <div class="container chart-div">
     <div class="row">
-      <!-- 첫 번째 차트 : 기간별 취미 갯수  -->
+      <!-- 좌측 차트 : 기간별 취미 갯수  -->
       <div class="col-md-6" style="min-height:70vh">
         <canvas ref="chart1"></canvas>
       </div>
-      <!-- 두 번째 차트 : 월별 취미 갯수  -->
+      <!-- 우측 차트 : 월별 취미 갯수  -->
       <div class="col-md-6" style="height:70vh">
         <canvas ref="chart2"></canvas>
       </div>
@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted: function () {
-    //admin의 경우 멤버 전체의 분포를 볼 수 있도록
+    //admin의 경우 멤버 전체의 수치를 볼 수 있도록
     this.member_id = localStorage.member_id == 1 ? '' : localStorage.member_id;
     this.selectListL();
   },
@@ -178,11 +178,16 @@ export default {
     }
 
   },
-
-
-
-
-
 }
-
 </script>
+<style>
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+    .chart-div{
+      max-height: 75vh;
+      overflow-x: auto;
+    }
+    
+}
+</style>

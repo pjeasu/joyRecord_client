@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <b-card no-body class="overflow-hidden mx-auto" style="width:60em;">
+    <b-card no-body class="mx-auto" id="member-info">
       <b-row no-gutters>
-        <b-col md="6">
-          <b-card-body class="text-center rounded-0" style=" border-right: dotted 4px rgb(234 195 159 / 48%);">
+        <b-col md="6" >
+          <b-card-body id="card-info" class="text-center rounded-0" >
             <div id="loginForm">
               <h2 class="label-text" style="padding-top:1.5em">MEMBER INFO</h2>
               <b-form style="width:80%; margin:2em auto;" @submit.prevent>
@@ -301,4 +301,34 @@ export default {
 .colorSelect option:nth-child(5) {
   background-color: #F2CC8F;
 }
+
+#member-info{
+  width:70vw;
+  height:80vh;
+  overflow-x: auto;
+}
+
+#card-info {
+  border-right: dotted 4px rgb(234 195 159 / 48%);
+  height:79vh;
+}
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+  #member-info{
+  width:90vw;
+}
+
+  #card-info {
+  border-right: none;
+  border-bottom: dotted 4px rgb(234 195 159 / 48%);
+  height:auto;
+  }
+  
+  .card-body{
+    overflow-y: visible;
+  
+  }
+}
+
 </style>

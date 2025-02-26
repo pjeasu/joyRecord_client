@@ -2,7 +2,7 @@
     <div>
 
         <!-- joy record logo  -->
-        <svg @click="logoClick" :style="logoStyle" style=" cursor: pointer;" width="300" height="120"
+        <svg @click="logoClick" id="joy-logo" :style="logoStyle" style="cursor: pointer;" width="300" height="120"
             viewBox="0 0 602 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="301" cy="110" rx="293" ry="102" fill="#FFFCF2" stroke="#217844" stroke-width="15" />
             <path
@@ -176,13 +176,27 @@ export default {
     margin-right:1em;
 }
 
+#joy-logo{
+    max-width:13vw;
+    min-width:180px;
+}
+
 /* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
 @media screen and (max-width: 768px) {
     #menu-icon{
+        font-size:2em; 
+        line-height:2em; 
         margin-left:0;
+        
     }
     #member-icon{
+        font-size:2em; 
+        line-height:2em; 
         margin-right:0;
+    }
+
+    #joy-logo{
+        margin-top:0!important;
     }
 }
 </style>

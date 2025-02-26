@@ -213,7 +213,7 @@ export default {
 }
 
 /* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
 
   #calendar{
     height:80vh; 
@@ -224,11 +224,12 @@ export default {
 
   .fc-toolbar-title {
     font-weight: 500;
-    font-size: 1.5em;
-    padding-right: 1em;
+    font-size: 1.5em!important;
+    padding-right: 0;
   }
     .fc .fc-button-primary {
     font-size : 1em;
+    line-height : 1em;
   }
 
 }

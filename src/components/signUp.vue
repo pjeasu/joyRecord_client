@@ -2,7 +2,7 @@
 	<b-container class="mt-5">
 		<b-row>
 			<b-col md="6" offset-md="3">
-				<b-card  class="card-body">
+				<b-card  class="card-body" id="sign-up">
 					<h2 style="font-weight:bold">Sign Up</h2>
 					<b-form @submit.prevent>
 						<!-- 아이디 -->
@@ -236,7 +236,7 @@ export default {
 b-modal {
 	font-family: NanumGothic !important;
 }
-.card-body{
+#sign-up{
 	max-height: 72vh;
     overflow-y: auto;
 }
