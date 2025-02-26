@@ -1,6 +1,6 @@
 <template>
   <div id="mainCalendar">
-    <div id="calendar" ref="calendar" style="margin:0 auto; max-height:80vh; max-width:70vw"></div>
+    <div id="calendar" ref="calendar" ></div>
 
     <!-- 글 상세보기 / 글쓰기 모달 -->
     <EventModal v-model="eventModal" :type="type" :board_id="board_id" :selectedDate="selectedDate"
@@ -176,10 +176,6 @@ export default {
   color: #ffffff;
 }
 
-.fc-toolbar-title {
-  font-weight: 700;
-  padding-right: 4em;
-}
 
 #mainCalendar a {
   text-decoration: none;
@@ -200,6 +196,8 @@ export default {
 }
 
 .fc-toolbar-title {
+  font-weight: 700;
+  padding-right: 4em;
   font-family: DungGeunMo
 }
 
@@ -207,4 +205,32 @@ export default {
 .fc-daygrid-dot-event {
   background-color: #f6ba86
 } */
+
+#calendar{
+  margin:0 auto; 
+  max-height:80vh; 
+  max-width:70vw
+}
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+
+  #calendar{
+    height:80vh; 
+    max-height:80vh; 
+    width:98vw; 
+    max-width:99vw
+  }
+
+  .fc-toolbar-title {
+    font-weight: 500;
+    font-size: 1.5em;
+    padding-right: 1em;
+  }
+    .fc .fc-button-primary {
+    font-size : 1em;
+  }
+
+}
+
 </style>

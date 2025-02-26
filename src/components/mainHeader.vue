@@ -30,8 +30,8 @@
         <b-dropdown class="float-start custom-dropdown" size="lg" variant="link" toggle-class="text-decoration-none"
             no-caret offset="70,-50">
             <template #button-content>
-                <i class="bi bi-list h1 " v-if="!hiddenElement" @click="roleCheck"
-                    style="font-size:2.5em; line-height:2.5em; margin-left:1em"></i>
+                <i class="bi bi-list h1" id="menu-icon" v-if="!hiddenElement" @click="roleCheck"
+                    ></i>
             </template>
             <b-dropdown-text style="width: 240px; font-size: 1em;">
                 MENU
@@ -65,7 +65,7 @@
             no-caret offset="-60,-60">
             <template #button-content>
                 <i class="bi bi-person-circle h1 float-end" v-if="!hiddenElement"
-                    style="font-size:2.5em; line-height:2.5em; padding-right:1em"></i>
+                id="member-icon"></i>
             </template>
             <b-dropdown-item :to="{ path: 'memberInfo' }">Member Info</b-dropdown-item>
             <b-dropdown-item @click="fnLogout">Logout</b-dropdown-item>
@@ -101,7 +101,7 @@ export default {
                 case 'loginPage':
                     return { marginTop: '5em' };
                 default:
-                    return { marginTop: '1em', width: '15em' };
+                    return { marginTop: '1em', width: '40vw' };
             }
         }
     },
@@ -162,5 +162,27 @@ export default {
 
 .dropdown-menu:hover {
     --bs-dropdown-bg: #FFD6B1 !important;
+}
+
+
+#menu-icon{
+    font-size:2.5em; 
+    line-height:2.5em; 
+    margin-left:1em;
+}
+#member-icon{
+    font-size:2.5em; 
+    line-height:2.5em; 
+    margin-right:1em;
+}
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+    #menu-icon{
+        margin-left:0;
+    }
+    #member-icon{
+        margin-right:0;
+    }
 }
 </style>

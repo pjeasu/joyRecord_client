@@ -1,5 +1,5 @@
 <template>
-  <div style="margin:3vh 5em">
+  <div class="main-div">
     <b-container style="min-height:60vh">
       <b-input-group style="display:inline;">
         <div class="form-inline" style="margin-bottom:1em">
@@ -273,4 +273,20 @@ export default {
 fieldset {
   margin-bottom: 0 !important;
 }
+
+
+.main-div{
+  margin:3vh 5em
+}
+
+
+/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 768px) {
+  .main-div{
+    margin:1vh 0;
+    max-width:auto;
+  }
+  /* 추가적인 스타일 변경 가능 */
+}
+
 </style>
