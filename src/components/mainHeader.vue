@@ -40,6 +40,12 @@
             <b-dropdown-item style="font-size:2em" :to="{ path: 'joyChart' }">
                 Joy Chart
             </b-dropdown-item>
+            <b-dropdown-item v-show="!isAdm" :to="{ path: 'mainCalendar' }">
+                Joy - Calendar
+            </b-dropdown-item>
+            <b-dropdown-item v-show="!isAdm" :to="{ path: 'mainList' }">
+                Joy - List 
+            </b-dropdown-item>
             <b-dropdown-item :to="{ path: 'joyRecordInfo' }">
                 info
             </b-dropdown-item>

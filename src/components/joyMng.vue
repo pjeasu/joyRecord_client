@@ -96,7 +96,6 @@ export default {
 
     openModal(item) {
       this.joyData = item;
-      console.log(item)
       if (item === 'new') {
         this.type = 'write';
       } else {
