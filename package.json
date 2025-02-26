@@ -17,6 +17,7 @@
     "axios": "^1.7.2",
     "bootstrap-icons": "^1.11.3",
     "bootstrap-vue-3": "^0.5.1",
+    "chart.js": "^4.4.8",
     "core-js": "^3.8.3",
     "fullcalendar": "^6.1.13",
     "vue": "^3.2.13",

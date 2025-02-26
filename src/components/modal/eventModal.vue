@@ -88,7 +88,7 @@ export default {
       required: false
     },
     board_id: {
-      type: String,
+      type: [String, Number],
       required: false
     },
 

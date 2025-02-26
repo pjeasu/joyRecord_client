@@ -38,7 +38,7 @@
             </b-dropdown-text>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item style="font-size:2em" :to="{ path: 'joyChart' }">
-                Joy Record
+                Joy Chart
             </b-dropdown-item>
             <b-dropdown-item :to="{ path: 'joyRecordInfo' }">
                 info

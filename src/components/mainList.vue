@@ -216,6 +216,7 @@ export default {
         this.type = 'write';
       } else {
         this.type = 'view';
+        this.board_id  = '';
         this.board_id = item.board_id;
       }
 
