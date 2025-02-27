@@ -1,22 +1,64 @@
 <template>
   <div class="main-div">
     <b-container style="min-height:60vh">
-      <b-input-group style="display:inline;">
-        <div class="form-inline" style="margin-bottom:1em">
+      <!-- 모바일 버전 검색조건  collapse -->
+      <div class="display-mobile" >
+        <b-row align-h="end" class="mb-1" >
+          <b-col align-self="start" cols="4">
+            <button class="btn" type="button" data-bs-toggle="collapse"
+              style="margin-bottom:0; background-color:lightgrey; border:none; color:aliceblue;"
+              data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse">
+              검색 조건
+            </button>
+          </b-col>
+          <b-col></b-col>
+          <b-col align-self="end" cols="5">
+            <b-form-radio-group id="btn-radios" @change="selectList" v-model="listSelected" :options="listOptions"
+              name="radios-btn-default" buttons></b-form-radio-group>
+          </b-col>
+        </b-row>
+        <div class="collapse" id="collapse">
+          <b-input-group>
+            <div style="margin-bottom:1em">
+              <b-row style="display:flex">
+                <b-col>
+                  <b-form-select id="joy-combo" v-model="joySelected" :options="joyList" class="search-form">
+                  </b-form-select>
+                </b-col>
+                <b-col cols="8">
+                  <b-form-input v-model="searchText" placeholder="검색" :value="searchText"
+                    style="margin-bottom:5px"></b-form-input>
 
+                </b-col>
+
+              </b-row>
+              <b-col sm="1" style="display:flex">
+                <Datepicker v-model="fromDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false"
+                  :min-date="minDate" :max-date="maxDate" class="search-form" />
+                <Datepicker v-model="toDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false"
+                  :min-date="minDate" :max-date="maxDate" class="search-form" />
+              </b-col>
+              <b-col><b-button id="search-btn" size="md" type="button" variant="secondary" style="width:95vw"
+                  @click="selectList()">검색</b-button>
+
+              </b-col>
+            </div>
+          </b-input-group>
+        </div>
+      </div>
+      <!-- /모바일 버전 검색조건  collapse -->
+
+      <b-input-group style="display:inline;" class="display-pc">
+        <div class="form-inline " style="margin-bottom:1em">
           <b-form-group>
             <b-form-radio-group id="btn-radios" @change="selectList" v-model="listSelected" :options="listOptions"
               name="radios-btn-default" buttons></b-form-radio-group>
           </b-form-group>
-
-
           <b-col sm="1"> <label for="joy-combo"> 취미 : </label></b-col>
           <b-col sm="2">
-            <b-form-select id="joy-combo" v-model="joySelected" :options="joyList"
-              style="display:inline-block; margin-bottom :5px">
+            <b-form-select id="joy-combo" v-model="joySelected" :options="joyList" class="search-form">
             </b-form-select>
           </b-col>
-
           <b-col sm="2">
             <b-form-input v-model="searchText" placeholder="검색" :value="searchText"
               style="margin-bottom:5px"></b-form-input>
@@ -24,13 +66,13 @@
           <b-col sm="1">기간 : </b-col>
           <b-col sm="2">
             <Datepicker v-model="fromDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false"
-              :min-date="minDate" :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
+              :min-date="minDate" :max-date="maxDate" class="search-form" />
 
           </b-col>
           -
           <b-col sm="2">
             <Datepicker v-model="toDate" locale="ko" format="yyyy-MM-dd" :enable-time-picker="false" :min-date="minDate"
-              :max-date="maxDate" style="display:inline-block; margin-bottom :5px" />
+              :max-date="maxDate" class="search-form" />
 
           </b-col>
           <b-col sm="">
@@ -39,23 +81,30 @@
         </div>
       </b-input-group>
 
-      <b-table hover class="align-middle" :items="items" :fields="fields" :per-page="perPage"
-        :current-page="currentPage">
-        <template #cell(joy_name)="row">
-          {{ row.value == null ? '-' : row.value }}
-        </template>
-        <template #cell(title)="row">
-          <b-button variant="link" size="sm" @click="openModal(row.item)" class="mr-1"
-            style="color:black; font-size:1rem;">
-            {{ row.value }}
-          </b-button>
+      <!-- 검색조건 끝 -->
 
-        </template>
+      <div id="main-table">
 
-      </b-table>
+
+        <b-table hover class="align-middle" :items="items" :fields="fields" :per-page="perPage"
+          :current-page="currentPage">
+          <template #cell(joy_name)="row">
+            {{ row.value == null ? '-' : row.value }}
+          </template>
+          <template #cell(title)="row">
+            <b-button variant="link" size="sm" @click="openModal(row.item)" class="mr-1"
+              style="color:black; font-size:1rem;">
+              {{ row.value }}
+            </b-button>
+
+          </template>
+
+        </b-table>
+      </div>
+
       <EventModal v-model="eventModal" :type="type" :board_id="board_id" @closeModal="close" />
 
-      <div v-show="items.length == 0">작성된 게시물이 없습니다. Joy를 기록하세요! 🎮🍺⚾🎥  </div>
+      <div v-show="items.length == 0">작성된 게시물이 없습니다. Joy를 기록하세요! 🎮🍺⚾🎥 </div>
       <div class="float-end">
         <b-button @click="openModal('new')" size="sm" type="button" variant="secondary">글쓰기</b-button>
       </div>
@@ -88,7 +137,7 @@ export default {
       searchText: '',
       //todo: 
       minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2024, 11, 31),
+      maxDate: new Date(2026, 12, 31),
       fromDate: '',
       toDate: '',
       fields: [
@@ -216,7 +265,7 @@ export default {
         this.type = 'write';
       } else {
         this.type = 'view';
-        this.board_id  = '';
+        this.board_id = '';
         this.board_id = item.board_id;
       }
 
@@ -239,7 +288,6 @@ export default {
 /* 상단 좌측 리스트 타입 라디오박스  */
 #btn-radios .form-check-inline {
   margin-right: 0 !important;
-  margin-top: 1em;
 }
 
 #btn-radios .form-check-inline:first-child .btn {
@@ -275,18 +323,47 @@ fieldset {
 }
 
 
-.main-div{
-  margin:3vh 5em
+.main-div {
+  margin: 3vh 5em
 }
+
+.search-form {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.display-mobile {
+  display: none;
+}
+
 
 
 /* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
 @media screen and (max-width: 768px) {
-  .main-div{
-    margin:1vh 0;
-    max-width:auto;
+  .main-div {
+    margin: 0;
+    max-width: auto;
+    max-height: 85vh;
+    overflow-y: auto;
   }
-  /* 추가적인 스타일 변경 가능 */
-}
 
+  .main-div .form-inline {
+    display: block;
+    align-items: center;
+  }
+
+  .display-pc {
+    display: none !important;
+  }
+
+  .display-mobile {
+    display: contents;
+  }
+
+  #main-table{
+    max-height: 67vh;
+    overflow-y: auto;
+  }
+
+}
 </style>

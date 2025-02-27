@@ -107,7 +107,7 @@ export default {
       isMine: false,
       //todo: 
       minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2024, 11, 31),
+      maxDate: new Date(2026, 12, 31),
       //이미지 업로드
       files: [],
       previewUrls: [],

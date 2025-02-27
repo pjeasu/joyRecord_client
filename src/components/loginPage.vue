@@ -90,12 +90,22 @@ export default {
   margin-top:3rem
 }
 
+
+.form-inline {
+  display: flex;
+  align-items: center;
+}
+
+
+
 /* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
 @media screen and (max-width: 768px) {
-  #login-page{
-  max-width: 20rem; 
-  margin-top:0;
+
+.form-inline {
+  display: inherit;
+  align-items: center;
 }
+
   
 }
 
