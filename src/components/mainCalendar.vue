@@ -65,9 +65,7 @@ export default {
             style: 'font-family : DungGeunMo',
             click: this.toMainList
           },
-          today: {
-            text: 'TODAY'
-          },
+        
         },
         headerToolbar: {
           left: 'prev,next today',
@@ -97,6 +95,10 @@ export default {
       this.type = 'view';
       this.eventModal = true;
       this.board_id = info.event.id;
+    },
+    /*   */
+    todayClick() {
+      console.log('test')
     },
 
     /* 글(이벤트) 조회 */
@@ -213,7 +215,7 @@ export default {
 }
 
 /* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 768px) {
 
   #calendar{
     height:80vh; 

@@ -2,8 +2,8 @@
   <div class="main-div">
     <b-container style="min-height:60vh">
       <!-- 모바일 버전 검색조건  collapse -->
-      <div class="display-mobile" >
-        <b-row align-h="end" class="mb-1" >
+      <div class="display-mobile">
+        <b-row align-h="end" class="mb-1">
           <b-col align-self="start" cols="4">
             <button class="btn" type="button" data-bs-toggle="collapse"
               style="margin-bottom:0; background-color:lightgrey; border:none; color:aliceblue;"
@@ -84,8 +84,6 @@
       <!-- 검색조건 끝 -->
 
       <div id="main-table">
-
-
         <b-table hover class="align-middle" :items="items" :fields="fields" :per-page="perPage"
           :current-page="currentPage">
           <template #cell(joy_name)="row">
@@ -96,9 +94,11 @@
               style="color:black; font-size:1rem;">
               {{ row.value }}
             </b-button>
+            <div class="d-sm-none text-muted" style="font-size: 0.8rem;">
+              {{ row.item.joy_date }} <span class="d-sm-none" :class="listSelected == 'mine' ? 'mobile-cls' : '' ">| {{ row.item.user_id }}</span>
+            </div>
 
           </template>
-
         </b-table>
       </div>
 
@@ -161,17 +161,23 @@ export default {
         {
           key: 'joy_date',
           label: '취미일',
-          sortable: true
+          sortable: true,
+          thClass: "d-none d-md-table-cell", // 헤더 숨김
+          tdClass: "d-none d-md-table-cell"  // 본문 숨김
         },
         {
           key: 'user_id',
           label: '작성자',
-          sortable: true
+          sortable: true,
+          thClass: "d-none d-md-table-cell", // 헤더 숨김
+          tdClass: "d-none d-md-table-cell"  // 본문 숨김
         },
         {
           key: 'created_date',
           label: '작성일시',
-          sortable: true
+          sortable: true,
+          thClass: "d-none d-md-table-cell", // 헤더 숨김
+          tdClass: "d-none d-md-table-cell"  // 본문 숨김
         }
       ],
       perPage: 10, // 한 페이지당 글 개수
@@ -231,20 +237,20 @@ export default {
         // 내 글보기 인경우에만 파라미터에 아이디 포함
         param.member_id = localStorage.member_id;
         // 내 글보기인 경우에 작성자 표시 X
-        this.fields.forEach((e) => {
+        this.fields = this.fields.map(e => {
           if (e.key === 'user_id') {
-            e.thClass = 'd-none';
-            e.tdClass = 'd-none';
+            return { ...e, thClass: 'd-none', tdClass: 'd-none' };
           }
-        })
+          return e;
+        });
       } else {
         // 모든 글 보기인 경우에만 작성자 표시
-        this.fields.forEach((e) => {
+        this.fields = this.fields.map(e => {
           if (e.key === 'user_id') {
-            e.thClass = '';
-            e.tdClass = '';
+            return { ...e, thClass: 'd-md-table-cell mobile-cls', tdClass: 'd-md-table-cell mobile-cls' };
           }
-        })
+          return e;
+        });
       }
 
       this.axios.get("/board/selectBoardList", {
@@ -336,10 +342,13 @@ fieldset {
   display: none;
 }
 
+.mobile-cls {
+  display: contents
+}
 
 
-/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
-@media screen and (max-width: 768px) {
+/* 화면 너비가 576px  이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 576px) {
   .main-div {
     margin: 0;
     max-width: auto;
@@ -360,9 +369,13 @@ fieldset {
     display: contents;
   }
 
-  #main-table{
+  #main-table {
     max-height: 67vh;
     overflow-y: auto;
+  }
+
+  .mobile-cls {
+    display: none
   }
 
 }
