@@ -446,8 +446,8 @@ input[readonly]:focus {
 #pub_yn {
   display: inline-block;
   position: absolute;
-  left: 2em;
-  bottom: 2.8em;
+  right: 2em;
+  bottom: 4em;
 }
 
 .img-cls{
