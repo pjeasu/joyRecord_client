@@ -30,7 +30,7 @@
       v-show="state !== 'view'"></b-form-textarea>
     <!-- 이미지 업로드 -->
     <template v-if="state == 'write'">
-      <form @submit.prevent="handleFileUpload">
+      <form @submit.prevent="handleFileUpload" style="display:inline-block">
         <input type="file" id="file" @change="onFileChange" accept="image/*" hidden />
         <label for="file">
           <div class="btn-upload modal-button">파일</div>
@@ -445,9 +445,7 @@ input[readonly]:focus {
 
 #pub_yn {
   display: inline-block;
-  position: absolute;
-  right: 2em;
-  bottom: 4em;
+  vertical-align: -webkit-baseline-middle;
 }
 
 .img-cls{
@@ -457,11 +455,7 @@ input[readonly]:focus {
 }
 
 .card-body {
-  overflow-y: auto;
+  overflow-y: auto!important;
 }
-@media screen and (max-width: 576px) {
-    .card-body {
-        overflow-y: auto;
-    }
-}
+
 </style>
