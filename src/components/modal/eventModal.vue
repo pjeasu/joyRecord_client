@@ -451,8 +451,12 @@ input[readonly]:focus {
 }
 
 .img-cls{
-   max-width:60%;
+   max-width:80%;
    margin-right:1em; 
    margin-bottom:1em;
+}
+
+.card-body {
+  overflow-y: auto;
 }
 </style>
