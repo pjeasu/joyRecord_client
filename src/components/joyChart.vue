@@ -182,8 +182,8 @@ export default {
 </script>
 <style>
 
-/* 화면 너비가 768px 이하일 때 (모바일/태블릿용) */
-@media screen and (max-width: 768px) {
+/* 화면 너비가 576px  이하일 때 (모바일/태블릿용) */
+@media screen and (max-width: 576px ) {
     .chart-div{
       max-height: 75vh;
       overflow-x: auto;

@@ -16,12 +16,11 @@
 
 
     <b-card style="height:23.5em" v-show="state == 'view'">
-      <!-- 첨부된 사진들  -->
+      <!-- 첨부된 사진 -->
       <template v-if="fileYn">
-        <div v-for="(file, index) in attachFileList" :key="index" style="display: inline-block; ">
-          <img :src="file.base64Image" alt="Image" style="max-width:15em; margin-right:1em; margin-bottom:1em" />
-        </div>
+        <img :src="attachFile" alt="업로드된 이미지" class="img-cls" />
       </template>
+      
       <b-card-text>
         {{ board_text }}
       </b-card-text>
@@ -30,19 +29,19 @@
     <b-form-textarea id="textarea-rows" placeholder="글 내용을 입력하세요." v-model="board_text" rows="15" :value="board_text"
       v-show="state !== 'view'"></b-form-textarea>
     <!-- 이미지 업로드 -->
-    <!-- <template v-if="state == 'write'">
-      <input type="file" id="file" multiple @change="handleFiles" />
-      <label for="file">
-        <div class="btn-upload modal-button">파일
+    <template v-if="state == 'write'">
+      <form @submit.prevent="handleFileUpload">
+        <input type="file" id="file" @change="onFileChange" accept="image/*" hidden />
+        <label for="file">
+          <div class="btn-upload modal-button">파일</div>
+        </label>
+
+        <div v-if="previewUrl" class="preview">
+          <img :src="previewUrl" alt="미리보기" class="img-cls"/>
         </div>
-      </label>
-      <div v-if="previewUrls.length">
-        <h5>미리보기:</h5>
-        <div v-for="(url, index) in previewUrls" :key="index">
-          <img :src="url" :alt="'Image Preview ' + index" style="max-width: 200px; margin: 10px;" />
-        </div>
-      </div>
-    </template> -->
+      </form>
+    </template>
+
 
     <!-- /이미지 업로드  -->
 
@@ -109,12 +108,14 @@ export default {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2026, 12, 31),
       //이미지 업로드
-      files: [],
-      previewUrls: [],
-
+      selectedFile: null,
+      previewUrl: null,
+      fileUrl: null,
+      maxFileSize: 5 * 1024 * 1024, // 5MB (1MB = 1024 * 1024 바이트)
       new_board_id: '', // 새로 등록된 board_id
       fileYn: false,
       attachFileList: [], // 등록된 게시물 첨부 사진 리스트
+      attachFile: null, // 등록된 게시물 첨부 사진 리스트
       confirmModal: false, // 모달의 표시 여부
     }
   },
@@ -129,21 +130,17 @@ export default {
       }
 
       // mainList에서 글 쓰는 경우 오늘 날짜로 자동 바인딩
-       if (this.selectedDate == undefined) {
-          const date = new Date();
-          const year = date.getFullYear();
-          const month = ('0' + (date.getMonth() + 1)).slice(-2);
-          const day = ('0' + date.getDate()).slice(-2);
-          this.joy_date = `${year}-${month}-${day}`;
-        } 
+      if (this.selectedDate == undefined) {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        this.joy_date = `${year}-${month}-${day}`;
+      }
     },
-   selectedDate(newDate) {
-      
-          this.joy_date = newDate; // 선택한 날짜 바인딩
-        
+    selectedDate(newDate) {
+      this.joy_date = newDate; // 선택한 날짜 바인딩
 
-
-  
     }
   },
   mounted() {
@@ -178,6 +175,9 @@ export default {
           if (form.file_id !== 0) {
             this.fileYn = true;
             this.selectFile();
+          }else{
+            this.attachFile = null;
+            this.fileYn = false;
           }
         })
         .catch((error) => {
@@ -194,16 +194,8 @@ export default {
         }
       })
         .then((res) => {
-          this.attachFileList = res.data;
-          this.attachFileList.forEach(item => {
-            this.axios.get(`/files/image/${item.file_name}`).then((result) => {
-              const temp = result.data;
-              item.base64Image = 'data:image/jpeg;base64,' + temp.image; // Base64 문자열을 이미지 URL로 변환
-            })
+          this.attachFile = res.data[0].file_path;
 
-
-
-          });
         })
         .catch((error) => {
           console.log(error);
@@ -253,10 +245,9 @@ export default {
           }).then((res) => {
             if (res) {
               this.new_board_id = res.data.board_id;
-
               // 첨부파일이 있는 경우
-              if (this.files.length > 0) {
-                this.uploadFiles();
+              if (this.file !== null) {
+                this.handleFileUpload();
 
               } else {
                 alert('글이 등록되었습니다.');
@@ -306,8 +297,6 @@ export default {
             console.log(error)
           });
       }
-
-
     },
     /* 모달 닫기 버튼*/
     closeModal() {
@@ -315,8 +304,7 @@ export default {
       this.title = '';
       this.board_text = '';
       this.joySelected = null;
-
-
+      this.previewUrl = null;
 
       if (this.state === 'edit') {
         this.state = 'view';
@@ -328,48 +316,41 @@ export default {
       this.fileYn = false;
     },
 
-    /* 파일 업로드  */
-    handleFiles(event) {
-      this.files = Array.from(event.target.files);
-      this.previewUrls = this.files.map(file => URL.createObjectURL(file));
-    },
-    /* async uploadFiles() {
-      if (this.files.length === 0) {
-        alert('업로드할 파일을 선택하세요.');
-        return;
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+
+        if (file.size > this.maxFileSize) {
+          alert("파일 크기가 5MB를 초과합니다. 5MB 이하의 사진을 첨부해주세요.");
+          this.selectedFile = null;
+          return;
+        }
+        this.selectedFile = file;
+        // 미리보기 URL 생성
+        this.previewUrl = URL.createObjectURL(file);
       }
+    },
+    handleFileUpload() {
       const formData = new FormData();
-      this.files.forEach(file => {
-        formData.append('files', file);
-      });
+      formData.append("file", this.selectedFile);
       formData.append('param', this.new_board_id);
 
-      try {
-        const response = await this.axios.post('/files/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        alert('글이 등록되었습니다.');
-        this.closeModal();
-      } catch (error) {
-        if (error.response) {
-          // 서버가 응답을 반환했지만 상태 코드가 2xx가 아닌 경우
-          console.error('서버 응답 오류:', error.response.data);
-          console.error('상태 코드:', error.response.status);
-        } else if (error.request) {
-          // 요청이 전송되었지만 응답이 없는 경우
-          console.error('서버로부터 응답이 없습니다.', error.request);
-        } else {
-          // 요청을 설정하는 도중에 발생한 문제
-          console.error('요청 오류:', error.message);
-        }
-        alert('업로드 실패');
-      } finally {
-        //파일 초기화
-        this.files = [];
-      }
-    }, */
+      this.axios.post("/file/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          if (res.data.fileUrl) {
+            this.fileUrl = res.data.fileUrl;
+            alert('글이 등록되었습니다.');
+            this.closeModal();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
     /* 체크박스 readonly 처리 */
     readonly(event) {
       // 글 보기 상태일 때만 체크박스 막기
@@ -467,5 +448,11 @@ input[readonly]:focus {
   position: absolute;
   left: 2em;
   bottom: 2.8em;
+}
+
+.img-cls{
+   max-width:60%;
+   margin-right:1em; 
+   margin-bottom:1em;
 }
 </style>
