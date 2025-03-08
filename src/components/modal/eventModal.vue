@@ -459,4 +459,9 @@ input[readonly]:focus {
 .card-body {
   overflow-y: auto;
 }
+@media screen and (max-width: 576px) {
+    .card-body {
+        overflow-y: auto;
+    }
+}
 </style>
