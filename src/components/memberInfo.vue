@@ -302,6 +302,14 @@ export default {
   background-color: #F2CC8F;
 }
 
+.colorSelect option:nth-child(6) {
+  background-color: #FFC6C6;
+}
+
+.colorSelect option:nth-child(6) {
+  background-color: #5a8190;
+}
+
 #member-info {
   width: 70vw;
   height: 80vh;
