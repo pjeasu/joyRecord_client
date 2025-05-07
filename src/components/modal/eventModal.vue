@@ -335,11 +335,7 @@ export default {
       formData.append("file", this.selectedFile);
       formData.append('param', this.new_board_id);
 
-      this.axios.post("/file/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      this.axios.post("/file/upload", formData)
         .then((res) => {
           if (res.data.fileUrl) {
             this.fileUrl = res.data.fileUrl;
