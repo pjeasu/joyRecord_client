@@ -115,7 +115,7 @@ export default {
       changePW: false,
       //todo
       colorList: [{ text: '선택', value: '' }, { text: 'ㅤ', value: '#858BBE' },
-      { text: 'ㅤ', value: '#BFE5B6' }, { text: 'ㅤ', value: '#81B29A' }, { text: 'ㅤ', value: '#F2CC8F' }]
+      { text: 'ㅤ', value: '#BFE5B6' }, { text: 'ㅤ', value: '#81B29A' }, { text: 'ㅤ', value: '#F2CC8F' }, { text: 'ㅤ', value: '#FFC6C6' }, { text: 'ㅤ', value: '#5a8190' }]
     }
   },
   mounted: function () {
