@@ -22,6 +22,18 @@ JoyRecord는 사용자가 감상한 영화, 드라마, 게임, 스포츠 경기 
 JoyRecord 클라이언트는 **Vue3**와 **Bootstrap**을 기반으로 제작되었으며, 기록한 취미 내용들을 한눈에 볼 수 있도록 캘린더 형식과 리스트 형식을 모두 사용하였습니다. 
 
 <br>
+<table>
+  <tr>
+    <td><img width="100%" alt="화면 캡처_캘린더화면" src="https://github.com/user-attachments/assets/f46bd0ac-4503-4183-baf9-37c3657a6bd8" /></td>
+    <td><img width="100%" alt="화면 캡처_글상세보기" src="https://github.com/user-attachments/assets/e8f03727-910c-485a-9ab1-a0ad6bbf8c90" /></td>
+  </tr>
+  <tr>
+    <td><img width="100%" alt="화면 캡처_리스트" src="https://github.com/user-attachments/assets/828046f1-43d8-43b0-846e-d3ebbfdc4461" /></td>
+    <td><img width="100%" alt="화면 캡처_조이차트" src="https://github.com/user-attachments/assets/b97d3c9e-1e66-4b45-91a1-dd7524eb09a9" /></td>
+  </tr>
+</table>
+<br>
+
 
 ## 🛠️ 기술 스택  
 
