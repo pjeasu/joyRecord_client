@@ -246,8 +246,9 @@ export default {
             if (res) {
               this.new_board_id = res.data.board_id;
               // 첨부파일이 있는 경우
-              if (this.file !== null) {
-                this.handleFileUpload();
+              //if (this.file !== null) {
+                if (this.selectedFile && this.selectedFile instanceof File) {
+                    this.handleFileUpload();
 
               } else {
                 alert('글이 등록되었습니다.');
